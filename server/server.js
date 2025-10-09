@@ -14,7 +14,7 @@ mongoConnect();
 
 app.use(express.static(path.join(__dirname, "../client/dist")));
 
-app.use('/{*any}', (req, res) => {
+app.use("/{*any}", (req, res) => {
   res.sendFile(path.join(__dirname, "../client/dist/index.html"));
 });
 

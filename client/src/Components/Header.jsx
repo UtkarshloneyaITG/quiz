@@ -23,7 +23,7 @@ const Header = () => {
   const handleLogOut = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/auth/user/logout"
+        "http://localhost:3000/api/auth/user/logout"
       );
       const data = res.data;
       console.log(data);
@@ -39,8 +39,6 @@ const Header = () => {
       console.log("logout erro", e);
     }
   };
-
-  console.log("isAuth", isAuth);
 
   return (
     <div className="header-wrapper fixed w-full ">
@@ -60,16 +58,24 @@ const Header = () => {
             </div>
           </div>
           <div className="header-navs flex gap-10">
-            <nav className="navs flex gap-10 text-[18px] font-bold uppercase  self-center text-white ">
-              <NavLink className={"navs-link"} to="/">
+            <nav className="flex gap-10 text-[18px] font-bold uppercase  self-center text-white ">
+              <NavLink
+                to="/"
+                className={({ isActive }) =>
+                  isActive ? "navs-link-active navs" : "navs-link navs"
+                }
+              >
                 Home
               </NavLink>
-              <NavLink className={"navs-link"} to="/about">
+
+              <NavLink
+                to="/about"
+                className={({ isActive }) =>
+                  isActive ? "navs-link-active navs" : "navs-link navs"
+                }
+              >
                 About
               </NavLink>
-              {/* <NavLink className={"navs-link"} to="/history">
-                History
-              </NavLink> */}
             </nav>
             <div className="login-btn self-center">
               {isAuth ? (
@@ -89,9 +95,12 @@ const Header = () => {
               )}
             </div>
             <div className="profile">
-              <div className="user-box uppercase font-bold text-2xl border-1 cursor-pointer bg-purple-400 text-white">
+              <Link
+                to={isAuth ? "/dashboard" : "/login"}
+                className="user-box uppercase font-bold text-2xl border-1 cursor-pointer bg-purple-400 text-white"
+              >
                 {userNameFristLater}
-              </div>
+              </Link>
             </div>
           </div>
         </div>

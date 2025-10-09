@@ -1,68 +1,221 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@import "tailwindcss";
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+/* body {
+    overflow: hidden;
+} */
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+.page-width {
+  max-width: 95%;
+  margin: auto;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+.header-wrapper {
+  background-color: rgba(64, 36, 165, 0.616);
+  animation: fadeIn 1500ms;
 }
 
-body {
-  margin: 0;
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.header-grid {
+  padding: 20px 0px;
+}
+
+.user-box {
+  padding: 5px 15px;
+  border-radius: 99px;
+}
+
+.profile {
   display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  align-items: center;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+.login {
+  padding: 5px 10px 8px 10px;
+  transition: all 0.3s;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+.login:hover {
+  background: transparent;
+  color: white;
+  border: 1px solid rgb(35, 21, 73);
+  background: transparent;
+  color: white;
+  border: 1px solid white;
+}
+
+.card {
+  box-shadow: 0px 5px 12px 5px black;
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  transition: all 0.4s ease-out;
+  animation: slideUp 1400ms;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+@keyframes slideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
   }
-  a:hover {
-    color: #747bff;
+
+  100% {
+    opacity: 1;
+    transform: translateY(10px);
   }
-  button {
-    background-color: #f9f9f9;
-  }
+}
+
+.card:hover {
+  transform: translateY(-20px);
+  box-shadow: 0px 8px 12px 6px rgb(75, 3, 94);
+}
+
+.card-list {
+  padding: 20px 0px;
+}
+
+.content {
+  transition: all 0.4s ease-out;
+  padding: 10px 0px;
+}
+
+.card:hover .content {
+  height: 65px;
+  transition-delay: 4s;
+
+  height: 100px;
+}
+
+.navs-link {
+  transition: all 0.4s;
+}
+
+.navs-link:hover {
+}
+.navs-link-active {
+  color: #c27aff;
+}
+.bg {
+  box-shadow: inset 0px 0px 12px 5px black;
+}
+
+.test-box,
+.dashboard {
+  padding: 25px 40px;
+  border: 1px solid rgb(237, 192, 255);
+  box-shadow: 0px 0px 13px 4px rgb(71, 32, 143);
+  border-radius: 30px;
+  animation: fadeIn 1300ms;
+}
+
+.test-wrapper {
+  padding: 145px;
+}
+
+.test-content,
+.dash-content {
+  background-color: rgb(35, 21, 73);
+  padding: 10px 20px;
+  border-radius: 20px;
+  margin-top: 15px;
+}
+
+.options-div,
+.scores {
+  background: rgb(46, 28, 100);
+  padding: 10px;
+  margin-top: 20px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.buttons {
+  margin: 20px 0px;
+  padding: 0px 20px;
+  align-items: center;
+}
+
+.sub-btn {
+  padding: 10px 15px;
+  background: rgb(143, 255, 143);
+  border: 1px solid black;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.next-btn {
+  padding-left: 15px;
+}
+
+.dash-content {
+  padding: 30px 20px;
+}
+
+.pop-up {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 200px;
+}
+
+.pop-bg {
+  background: rgb(10, 3, 24);
+  position: absolute;
+  top: 14%;
+  left: 0;
+  z-index: 1001;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.score-holder {
+  height: 56px;
+  overflow: hidden;
+  transition: height 0.3s ease;
+}
+
+.score-holder.open {
+  height: 150px;
+  overflow: visible;
+  font-size: 15px;
+  border: 0.5px solid white;
+}
+
+.navs {
+  position: relative;
+}
+
+.navs::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  height: 2px;
+  width: 15px;
+  background-color: rgb(194 122 255);
+  transition: 0.3s;
+}
+
+.navs::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  height: 2px;
+  left: 0;
+  width: 5px;
+  background-color: rgb(194 122 255);
+  transition: 0.5s;
+}
+
+.navs:hover::before,
+.navs:hover::after {
+  width: 100%;
 }
