@@ -35,8 +35,7 @@ const getQuestionByID = async (req, res, next) => {
       });
     }
     return res.status(200).json(ans_id);
-  }
-  catch (error) {
+  } catch (error) {
     next(error);
   }
 };

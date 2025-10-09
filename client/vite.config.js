@@ -9,9 +9,9 @@ export default defineConfig({
     outDir: "dist",
   },
   server: {
-    port: 5000,
+    port: 4000,
     proxy: {
-      "/api": "http://localhost:5000",
+      "/api": "http://localhost:4000",
     },
   },
 });
