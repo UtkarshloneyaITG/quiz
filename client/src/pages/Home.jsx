@@ -1,6 +1,6 @@
 import React from 'react'
-import Background from '../components/Background'
-import SelectCard from '../components/SelectCard'
+import Background from '../Components/Background'
+import SelectCard from '../Components/SelectCard'
 
 const Home = () => {
   return (

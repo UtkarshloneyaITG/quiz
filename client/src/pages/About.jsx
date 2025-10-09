@@ -1,6 +1,6 @@
 // src/components/AboutPage.jsx
 import React from 'react';
-import AboutSection from '../components/AboutSection';
+import AboutSection from '../Components/AboutSection';
 
 const AboutPage = () => {
   return (
