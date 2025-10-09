@@ -3,7 +3,7 @@ import axios from "axios";
 export const singup = async (obj) => {
   try {
     const res = await axios.post(
-      "http://localhost:3000/api/auth/user/register",
+      "http://localhost:5000/api/auth/user/register",
       obj
     );
 
@@ -16,7 +16,7 @@ export const singup = async (obj) => {
 
 export const login = async (email, password) => {
   try {
-    const res = await axios.post("http://localhost:3000/api/auth/user/login", {
+    const res = await axios.post("http://localhost:5000/api/auth/user/login", {
       email: email,
       password: password,
     });
@@ -31,7 +31,7 @@ export const login = async (email, password) => {
 export const dashboard = async (email) => {
   try {
     const res = await axios.post(
-      "http://localhost:3000/api/auth/user/dashboard",
+      "http://localhost:5000/api/auth/user/dashboard",
       {
         email: email,
       }

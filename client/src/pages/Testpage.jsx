@@ -19,7 +19,7 @@ const Testpage = () => {
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/question/all");
+        const response = await axios.get("http://localhost:5000/question/all");
         setQuestions(response.data);
         console.log("Questions fetched:", response.data);
       } catch (error) {
@@ -75,7 +75,7 @@ const Testpage = () => {
       };
 
       const response = await axios.post(
-        "http://localhost:3000/question/submit_answer",
+        "http://localhost:5000/question/submit_answer",
         payload
       );
 
@@ -117,7 +117,7 @@ const Testpage = () => {
 
               <div className="options mb-6">
                 <div className="flex flex-col gap-2">
-                  {currentQuestion.Answers.map((answer, i) => (
+                  {currentQuestion.Answers?.map((answer, i) => (
                     <label
                       key={answer.AnswerID}
                       className="options-div text-[18px] font-medium text-white bg-[#4b3f7f] p-2 rounded flex items-center cursor-pointer"

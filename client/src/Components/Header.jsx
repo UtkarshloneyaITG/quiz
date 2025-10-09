@@ -23,7 +23,7 @@ const Header = () => {
   const handleLogOut = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/auth/user/logout"
+        "http://localhost:5000/api/auth/user/logout"
       );
       const data = res.data;
       console.log(data);
