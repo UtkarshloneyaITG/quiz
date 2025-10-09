@@ -1,4 +1,4 @@
-import Header from "./components/Header";
+import Header from "./Components/Header";
 import Home from "./pages/Home";
 import { Route, Routes } from "react-router-dom";
 import Testpage from "./pages/Testpage";
@@ -6,7 +6,7 @@ import Login from "./components/Login";
 import ProtectedRoutes from "./Components/ProtectedRoutes";
 import Dashboard from "./pages/Dashboard";
 import SignUp from "./Components/SignUp";
-import { MyContextProvider } from "./components/AuthContext";
+import { MyContextProvider } from "./Components/AuthContext";
 import AboutPage from "./pages/About";
 import NotFound from "./Components/NotFound";
 
