@@ -1,35 +1,35 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import Header from "./components/Header";
+import Home from "./pages/Home";
+import { Route, Routes } from "react-router-dom";
+import Testpage from "./pages/Testpage";
+import Login from "./components/Login";
+import ProtectedRoutes from "./Components/ProtectedRoutes";
+import Dashboard from "./pages/Dashboard";
+import SignUp from "./Components/SignUp";
+import { MyContextProvider } from "./components/AuthContext";
+import AboutPage from "./pages/About";
+import NotFound from "./Components/NotFound";
 
-function App() {
-  const [count, setCount] = useState(0)
-
+const App = () => {
   return (
-    <>
+    <MyContextProvider>
       <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+        <Header />
+        <Routes>
+          <Route index element={<Home />}></Route>
+          <Route path="/login" element={<Login />}></Route>
+          <Route path="/sigup" element={<SignUp />}></Route>
+          <Route path="/about" element={<AboutPage />}></Route>
+          <Route element={<ProtectedRoutes />}>
+            <Route path="/test" element={<Testpage />}></Route>
+            <Route path="/dashboard" element={<Dashboard />}></Route>
+          </Route>
 
-export default App
+          <Route path="*" element={<NotFound />}></Route>
+        </Routes>
+      </div>
+    </MyContextProvider>
+  );
+};
+
+export default App;
