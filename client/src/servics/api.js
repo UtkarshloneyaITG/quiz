@@ -10,6 +10,7 @@ export const singup = async (obj) => {
     const data = await res.data;
     return data;
   } catch (error) {
+    alert("singup faild");
     console.log("axiox error singup", error);
   }
 };
@@ -24,7 +25,8 @@ export const login = async (email, password) => {
     const data = res.data;
     return data;
   } catch (error) {
-    console.log("axiox error login", error);
+     alert("login faild");
+     console.log("axiox error login", error);
   }
 };
 
@@ -39,6 +41,7 @@ export const dashboard = async (email) => {
     const data = res.data;
     return data;
   } catch (error) {
-    console.log("axiox error dashboard", error.response.data);
+     alert("axiox error dashboard");
+     console.log("axiox error dashboard", error.response.data);
   }
 };
