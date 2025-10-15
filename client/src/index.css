@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
-/* body {
-    overflow: hidden;
-} */
+body::-webkit-scrollbar {
+    display: none;
+}
 
 .page-width {
     max-width: 95%;
