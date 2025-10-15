@@ -140,11 +140,11 @@ const Testpage = () => {
         payload
       );
 
-      console.log(t("Test submitted successfully:"), response.data); //  t() जोड़ा गया
-      alert(t("Test submitted successfully!")); //  t() जोड़ा गया
+      console.log(t("Test submitted successfully:"), response.data); 
+      alert(t("Test submitted successfully!")); 
     } catch (error) {
-      console.error(t("Error submitting test:"), error); //  t() जोड़ा गया
-      alert(t("Something went wrong while submitting test.")); //  t() जोड़ा गया
+      console.error(t("Error submitting test:"), error); 
+      alert(t("Something went wrong while submitting test.")); 
     }
     navigate("/dashboard");
   };

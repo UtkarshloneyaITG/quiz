@@ -22,18 +22,21 @@ function TournamentHeroPage() {
                 date="17/10/2025"
                 time="2:30"
                 title="html"
+                tType="wt"
               />
               <TournamentPageCard
                 type="wt"
                 date="17/10/2025"
                 time="2:30"
                 title="html"
+                tType="wt"
               />
               <TournamentPageCard
                 type="wt"
                 date="17/10/2025"
                 time="2:30"
                 title="html"
+                tType="wt"
               />
             </div>
           </div>
@@ -50,18 +53,21 @@ function TournamentHeroPage() {
                 date="17/10/2025"
                 time="2:30"
                 title="html"
+                tType="nt"
               />
               <TournamentPageCard
                 type="nt"
                 date="17/10/2025"
                 time="2:30"
                 title="css"
+                tType="nt"
               />
               <TournamentPageCard
                 type="nt"
                 date="17/10/2025"
                 time="2:30"
                 title="js"
+                tType="nt"
               />
             </div>
             <div className="Tournament-page-footer"></div>
