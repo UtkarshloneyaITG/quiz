@@ -8,17 +8,13 @@ const questionRouter = require("./routes/questionRouter");
 
 dotenv.config();
 
-const app = express();
-app.use(cors());
-app.use(express.json());
-app.use(cookieParser());
+function appSetup(app) {
+  app.use(cors());
+  app.use(express.json());
+  app.use(cookieParser());
 
-app.use("/api/auth/user", authRouter);
-app.use("/question", questionRouter);
+  app.use("/api/auth/user", authRouter);
+  app.use("/question", questionRouter);
+}
 
-app.use(express.static(path.join(__dirname, "../client/dist")));
-
-app.use("/{*any}", (req, res) => {
-  res.sendFile(path.join(__dirname, "../client/dist/index.html"));
-});
-module.exports = app;
+module.exports = appSetup;
