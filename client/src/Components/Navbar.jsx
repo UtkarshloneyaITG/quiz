@@ -3,10 +3,10 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useAdminFunctions } from "../provider/AdminProvider";
 import { useAlert } from "../servics/ApiChanger";
 import { useMyFunctions } from "../provider/MyAuthProvider";
-import  LanguageSwitcher  from "./LanguageSwitcher"
+import LanguageSwitcher from "./LanguageSwitcher";
 
 const Navbar = () => {
-  const {showAlert} = useAlert();
+  const { showAlert } = useAlert();
   const navigate = useNavigate();
   const { isAuth, setIsAuth, userName, setUserNameFristLater } =
     useMyFunctions();
@@ -14,7 +14,7 @@ const Navbar = () => {
   const handleLogOut = async () => {
     try {
       const res = await axios.post(
-        "https://test-app-backend-xi.vercel.app/api/auth/user/logout"
+        "http://localhost:5000/api/auth/user/logout"
       );
       const data = res.data;
       console.log(data);
@@ -22,9 +22,11 @@ const Navbar = () => {
       localStorage.removeItem("user");
       const token = localStorage.getItem("token");
       if (!token) {
-                  showAlert("LogOut SuccessFully","#CE2029");
+        showAlert("LogOut SuccessFully", "#CE2029");
         setIsAuth(token);
-       setTimeout(()=>{ navigate("/login");},1e3);
+        setTimeout(() => {
+          navigate("/login");
+        }, 1e3);
       }
     } catch (e) {
       console.log("logout erro", e);
