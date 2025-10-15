@@ -73,7 +73,7 @@ export const AdminContextProvider = ({ children }) => {
       setUser(parsedUser);
       setRole(parsedUser.role);
     }
-  }, []);
+  }, [role]);
 
   // Fetch all users from API on mount
   const handleUserType = (v) => {

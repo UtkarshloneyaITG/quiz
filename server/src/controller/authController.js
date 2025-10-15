@@ -45,6 +45,7 @@ exports.registerUser = async (req, res) => {
       userClass: newUser.userClass,
       scoreHistory: newUser.scoreHistory,
       token,
+      role: newUser.role,
     },
   });
 };
