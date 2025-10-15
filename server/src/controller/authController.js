@@ -43,6 +43,7 @@ exports.registerUser = async (req, res) => {
       email: newUser.email,
       fullName: newUser.fullName,
       userClass: newUser.userClass,
+      scoreHistory: newUser.scoreHistory,
       token,
     },
   });
@@ -85,6 +86,8 @@ exports.loginUser = async (req, res) => {
       email: myUser.email,
       fullName: myUser.fullName,
       userClass: myUser.userClass,
+      scoreHistory: myUser.scoreHistory,
+      role: myUser.role,
       token,
     },
   });
@@ -121,4 +124,189 @@ exports.dashboard = async (req, res) => {
       phoneNumber: myUser.phoneNumber,
     },
   });
+};
+
+exports.Deleteuser = async (req, res) => {
+  try {
+    const deletedUser = await User.findByIdAndDelete(req.body._id);
+    if (!deletedUser) {
+      return res.status(404).json({ msg: "User Not Found" });
+    } else {
+      res.status(200).json({ msg: "User Deleted Successfully" });
+    }
+  } catch (error) {
+    console(error);
+  }
+};
+exports.UsersFetchingData = async (req, res, next) => {
+  try {
+    const { role } = req.body;
+    const Users = await User.find({ role: role });
+    res.json({
+      message: "Fetched",
+      Users,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.AddAdmin = async (req, res, next) => {
+  try {
+    const { fullName, email, phoneNumber, password } = req.body;
+
+    const userEamilAllreadyExixt = await User.findOne({ email });
+    const userPhoneNumberAllreadyExixt = await User.findOne({ phoneNumber });
+
+    if (userEamilAllreadyExixt || userPhoneNumberAllreadyExixt) {
+      return res.status(400).json({
+        msg: "Admin allready esixt",
+      });
+    }
+
+    const hashPassword = await bcrypt.hash(password, 10);
+
+    const newUser = await User.create({
+      fullName,
+      email,
+      phoneNumber,
+      userClass: 12,
+      password: hashPassword,
+      role: "admin",
+    });
+
+    res.status(201).json({
+      message: "Admin created successfully",
+      user: {
+        fullName: newUser.fullName,
+        email: newUser.email,
+        phoneNumber: newUser.phoneNumber,
+        role: newUser.role,
+        userClass: newUser.userClass,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.updateUser = async (req, res) => {
+  try {
+    const { _id, ...updatedata } = req.body;
+
+    if (!_id) {
+      return res.status(400).json("Fiead Id is require for process");
+    }
+
+    const updateUser = await User.findByIdAndUpdate(_id, updatedata, {
+      new: true,
+    });
+
+    if (!updateUser) {
+      return res.status(400).json({ message: "User Not Found" });
+    }
+    res.json({
+      msg: "user updated successfully",
+      updateUser,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+exports.FindUser = async (req, res, next) => {
+  try {
+    const userEmaill = await User.findOne({ email: req.body.email });
+    console.log(userEmaill);
+
+    if (!userEmaill) {
+      return res.status(404).json({ msg: "User Not Found" });
+    } else {
+      res
+        .status(200)
+        .json({ msg: "User Found Successfully", user: userEmaill });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.updateUser = async (req, res) => {
+  try {
+    const { _id, oldPassword, ...updatedata } = req.body;
+    const { email } = req.body;
+    const checkPassword = await User.findOne({
+      email,
+    });
+
+    let updateUser;
+    const newPassword = await bcrypt.compare(
+      oldPassword,
+      checkPassword.password
+    );
+    console.log(oldPassword, newPassword);
+    if (!_id) {
+      return res.status(400).json("Fiead Id is require for process");
+    }
+
+    if (newPassword) {
+      updateUser = await User.findByIdAndUpdate(_id, updatedata, {
+        new: true,
+      });
+
+      if (!updateUser) {
+        return res.status(400).json({ message: "User Not Found" });
+      }
+
+      return res.json({
+        msg: "user updated successfully",
+        updateUser,
+      });
+    }
+    return res.json({ password: "missmatch" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.FindUser = async (req, res, next) => {
+  try {
+    const userEmaill = await User.findOne({ email: req.body.email });
+    console.log(userEmaill);
+
+    if (!userEmaill) {
+      return res.status(404).json({ msg: "User Not Found" });
+    } else {
+      res
+        .status(200)
+        .json({ msg: "User Found Successfully", user: userEmaill });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getLeaderBord = async (req, res) => {
+  try {
+    let users = await Answers.find();
+    users = users.sort((a, b) => b.Score - a.Score);
+
+    res.json(users);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+exports.getUserById = async (req, res, next) => {
+  try {
+    const { userId } = req.body;
+
+    const user = await User.findOne({ _id: userId });
+
+    res.status(200).json({
+      msg: "user find successfully",
+      user,
+    });
+  } catch (error) {
+    next(error);
+  }
 };

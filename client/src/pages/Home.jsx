@@ -1,14 +1,17 @@
-import React from 'react'
-import Background from '../components/Background'
-import SelectCard from '../components/SelectCard'
+import React from "react";
+import Background from "../Components/Background";
+import SelectCard from "../Components/SelectCard";
+import { memo } from "react";
+// import ShapeChangingLoader from "../Components/loader";
 
 const Home = () => {
   return (
-    <div >
+    <div>
+      {/* <ShapeChangingLoader /> */}
       <Background />
       <SelectCard />
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default memo(Home);

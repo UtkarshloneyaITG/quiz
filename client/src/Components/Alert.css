@@ -1,0 +1,46 @@
+/* CustomAlert.css */
+.custom-alert {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -100%);
+  width: 300px;
+  padding: 20px;
+  color: white;
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  z-index: 10000;
+  opacity: 0;
+}
+
+.custom-alert.show {
+  transform: translate(-50%, 20px);
+  opacity: 1;
+}
+
+.custom-alert.hide {
+  transform: translate(-50%, -100%);
+  opacity: 0;
+}
+
+.alert-content p {
+  margin: 0 0 10px;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.alert-content button {
+  background-color: white;
+  color: #333;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.alert-content button:hover {
+  background-color: #eee;
+}

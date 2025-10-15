@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { singup } from "../servics/api";
-import { useMyFunctions } from "./AuthContext";
+import { useAlert } from "../servics/ApiChanger";
+import { useMyFunctions } from "../provider/MyAuthProvider";
 
 export default function SignUp() {
+  const { showAlert } = useAlert();
   const [data, setData] = useState({
     fullName: "",
     email: "",
@@ -28,8 +30,9 @@ export default function SignUp() {
 
     if (token) {
       navigate("/");
+      showAlert("HomePage", "#006400");
     }
-  });
+  }, []);
 
   //  Validations
 
@@ -102,12 +105,20 @@ export default function SignUp() {
     // Proceed only if no errors
     const isValid = Object.values(newErrors).every((v) => v === "");
     if (isValid) {
+      showAlert("user SignUP SuccessFull", "#006400");
       const userData = await singup(data);
+      console.log(userData.userData);
       localStorage.setItem("token", userData.userData.token);
       localStorage.setItem("user", JSON.stringify(userData.userData));
       const token = localStorage.getItem("token");
+      const role = userData.userData.role;
       if (token !== "") {
         setIsAuth(token);
+        if (role == "admin") {
+          showAlert("SignUp Successfull as Admin", "#006400");
+          return navigate("/admin/dasbord");
+        }
+        showAlert("SignUP Successfull", "#006400");
         navigate("/");
       }
     }
@@ -120,7 +131,6 @@ export default function SignUp() {
         className="form flex flex-col gap-6 text-white shadow-lg rounded-2xl max-w-md w-full px-10 py-8 bg-black/40 backdrop-blur-md"
       >
         <h1 className="text-4xl font-bold mb-4">Sign-up</h1>
-
         {/* Full Name */}
         <div className="flex flex-col">
           <label htmlFor="fullName" className="font-bold">
@@ -224,9 +234,11 @@ export default function SignUp() {
               errors.userClass ? "border-red-500 bg-red-100 text-red-900" : ""
             }`}
           >
-            <option className="text-black" value="class">Select Class</option>
+            <option className="text-black" value="class">
+              Select Class
+            </option>
             {[...Array(12)].map((_, i) => (
-              <option className={`text-black`}   key={i + 1} value={i + 1}>
+              <option className={`text-black`} key={i + 1} value={i + 1}>
                 Class-{i + 1}
               </option>
             ))}

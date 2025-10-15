@@ -1,25 +1,39 @@
-const path = require("path");
-const express = require("express");
-const dotenv = require("dotenv");
-
-const app = require("./src/index");
+const http = require('http');
+const WebSocket = require('ws');
 const mongoConnect = require("./src/db/db");
 const errorHandler = require("./src/middleWare/errorHandler");
-
-dotenv.config();
-
-const PORT = process.env.PORT || 5000;
+const app = require('./src/index');
 
 mongoConnect();
 
-app.use(express.static(path.join(__dirname, "../client/dist")));
+const PORT = 5000;
 
-app.use("/{*any}", (req, res) => {
-  res.sendFile(path.join(__dirname, "../client/dist/index.html"));
+const server = http.createServer(app);
+
+const wss = new WebSocket.Server({ server });
+
+let liveUsers = 0;
+
+wss.on('connection', (ws) => {
+  liveUsers++;
+  broadcastLiveUsers();
+
+  ws.on('close', () => {
+    liveUsers--;
+    broadcastLiveUsers();
+  });
 });
+
+function broadcastLiveUsers() {
+  wss.clients.forEach(client => {
+    if (client.readyState === WebSocket.OPEN) {
+      client.send(String(liveUsers));
+    }
+  });
+}
 
 app.use(errorHandler);
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+server.listen(PORT, () => {
+  console.log(`Server running at http://localhost:${PORT}`);
 });

@@ -1,4 +1,3 @@
-
 const { default: mongoose } = require("mongoose");
 
 const answersschems = mongoose.Schema({
@@ -36,6 +35,10 @@ const answersschems = mongoose.Schema({
   Submited_on: {
     type: Date,
     default: Date.now,
+  },
+  esc_count: {
+    type: Number,
+    required: true,
   },
 });
 

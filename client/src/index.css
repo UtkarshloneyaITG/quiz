@@ -5,215 +5,233 @@
 } */
 
 .page-width {
-  max-width: 95%;
-  margin: auto;
+    max-width: 95%;
+    margin: auto;
 }
 
 .header-wrapper {
-  background-color: rgba(64, 36, 165, 0.616);
-  animation: fadeIn 1500ms;
+    background-color: #2a1e55;
+    animation: fadeIn 1500ms;
+    z-index: 1001;
 }
 
 @keyframes fadeIn {
-  0% {
-    opacity: 0;
-  }
+    0% {
+        opacity: 0;
+    }
 
-  100% {
-    opacity: 1;
-  }
+    100% {
+        opacity: 1;
+    }
 }
 
 .header-grid {
-  padding: 20px 0px;
+    padding: 20px 0px;
 }
 
 .user-box {
-  padding: 5px 15px;
-  border-radius: 99px;
+    padding: 5px 15px;
+    border-radius: 99px;
 }
 
 .profile {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 }
 
 .login {
-  padding: 5px 10px 8px 10px;
-  transition: all 0.3s;
+    padding: 5px 10px 8px 10px;
+    transition: all 0.3s;
 }
 
 .login:hover {
-  background: transparent;
-  color: white;
-  border: 1px solid rgb(35, 21, 73);
-  background: transparent;
-  color: white;
-  border: 1px solid white;
+    background: transparent;
+    color: white;
+    border: 1px solid rgb(35, 21, 73);
+    background: transparent;
+    color: white;
+    border: 1px solid white;
 }
 
 .card {
-  box-shadow: 0px 5px 12px 5px black;
-  cursor: pointer;
-  transition: all 0.4s ease-out;
-  animation: slideUp 1400ms;
+    box-shadow: 0px 5px 12px 5px black;
+    cursor: pointer;
+    transition: all 0.4s ease-out;
+    animation: slideUp 1400ms;
 }
 
 @keyframes slideUp {
-  0% {
-    opacity: 0;
-    transform: translateY(30px);
-  }
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
 
-  100% {
-    opacity: 1;
-    transform: translateY(10px);
-  }
+    100% {
+        opacity: 1;
+        transform: translateY(10px);
+    }
 }
 
 .card:hover {
-  transform: translateY(-20px);
-  box-shadow: 0px 8px 12px 6px rgb(75, 3, 94);
+    transform: translateY(-20px);
+    box-shadow: 0px 8px 12px 6px rgb(75, 3, 94);
 }
 
 .card-list {
-  padding: 20px 0px;
+    padding: 20px 0px;
 }
 
 .content {
-  transition: all 0.4s ease-out;
-  padding: 10px 0px;
+    transition: all 0.4s ease-out;
+    padding: 10px 0px;
+    height: 65px;
 }
 
 .card:hover .content {
-  height: 65px;
-  transition-delay: 4s;
 
-  height: 100px;
+    height: 100px;
 }
 
 .navs-link {
-  transition: all 0.4s;
+    border-bottom: 2px solid rgba(255, 206, 255, 0);
+    transition: all 0.4s;
 }
 
 .navs-link-active {
-  color: #c27aff;
-}
-.bg {
-  box-shadow: inset 0px 0px 12px 5px black;
-}
-
-.test-box,
-.dashboard {
-  padding: 25px 40px;
-  border: 1px solid rgb(237, 192, 255);
-  box-shadow: 0px 0px 13px 4px rgb(71, 32, 143);
-  border-radius: 30px;
-  animation: fadeIn 1300ms;
-}
-
-.test-wrapper {
-  padding: 145px;
-}
-
-.test-content,
-.dash-content {
-  background-color: rgb(35, 21, 73);
-  padding: 10px 20px;
-  border-radius: 20px;
-  margin-top: 15px;
-}
-
-.options-div,
-.scores {
-  background: rgb(46, 28, 100);
-  padding: 10px;
-  margin-top: 20px;
-  border-radius: 20px;
-  cursor: pointer;
-}
-
-.buttons {
-  margin: 20px 0px;
-  padding: 0px 20px;
-  align-items: center;
-}
-
-.sub-btn {
-  padding: 10px 15px;
-  background: rgb(143, 255, 143);
-  border: 1px solid black;
-  border-radius: 20px;
-  cursor: pointer;
-}
-
-.next-btn {
-  padding-left: 15px;
-}
-
-.dash-content {
-  padding: 30px 20px;
-}
-
-.pop-up {
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  align-items: center;
-  margin-bottom: 200px;
-}
-
-.pop-bg {
-  background: rgb(10, 3, 24);
-  position: absolute;
-  top: 14%;
-  left: 0;
-  z-index: 1001;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.score-holder {
-  height: 56px;
-  overflow: hidden;
-  transition: height 0.3s ease;
-}
-
-.score-holder.open {
-  height: 150px;
-  overflow: visible;
-  font-size: 15px;
-  border: 0.5px solid white;
+    color: #b669fa;
 }
 
 .navs {
-  position: relative;
+    position: relative;
 }
 
 .navs::before {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  height: 2px;
-  width: 15px;
-  background-color: rgb(194 122 255);
-  transition: 0.3s;
+    content: "";
+    position: absolute;
+    bottom: 0;
+    height: 2px;
+    width: 15px;
+    background-color: rgb(194 122 255);
+    transition: 0.3s;
 }
 
 .navs::after {
-  content: "";
-  position: absolute;
-  bottom: -5px;
-  height: 2px;
-  left: 0;
-  width: 5px;
-  background-color: rgb(194 122 255);
-  transition: 0.5s;
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    height: 2px;
+    left: 0;
+    width: 5px;
+    background-color: rgb(194 122 255);
+    transition: 0.5s;
 }
 
 .navs:hover::before,
 .navs:hover::after {
-  width: 100%;
+    width: 100%;
+}
+
+.bg {
+    box-shadow: inset 0px 0px 12px 5px black;
+}
+
+.test-box,
+.dashboard {
+    padding: 25px 40px;
+    border: 1px solid rgb(237, 192, 255);
+    box-shadow: 0px 0px 13px 4px rgb(71, 32, 143);
+    border-radius: 30px;
+    animation: fadeIn 1300ms;
+}
+
+.test-content,
+.dash-content {
+    background-color: rgb(35, 21, 73);
+    padding: 10px 20px;
+    border-radius: 20px;
+    margin-top: 15px;
+}
+
+.options-div,
+.scores {
+    background: rgb(46, 28, 100);
+    padding: 10px;
+    margin-top: 20px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.buttons {
+    margin: 20px 0px;
+    padding: 0px 20px;
+    align-items: center;
+}
+
+.sub-btn {
+    padding: 10px 15px;
+    background: rgb(143, 255, 143);
+    border: 1px solid black;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.next-btn {
+    padding-left: 15px;
+}
+
+.dash-content {
+    padding: 30px 20px;
+}
+
+.pop-up {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 200px;
+}
+
+.pop-bg {
+    background: rgb(10, 3, 24);
+    position: absolute;
+    top: 14%;
+    left: 0;
+    z-index: 1001;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.score-holder {
+    height: 56px;
+    overflow: hidden;
+    transition: height 0.3s ease;
+}
+
+.score-holder.open {
+    height: 150px;
+    overflow: visible;
+    font-size: 15px;
+    border: 0.5px solid white;
+}
+
+.navs {
+    position: relative;
+}
+
+.tournament-side-bar-list li {
+    position: relative;
+}
+
+.tournament-side-bar-list li::before {
+    content: '<svg xmlns=" http: //www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M8.122 24l-4.122-4 8-8-8-8 4.122-4 11.878 12z"/></svg>';
+}
+
+.liveUser-bar{
+    box-shadow: 0px 3px 4px 2px rgb(0, 0, 0);
+}
+
+.question-flow::-webkit-scrollbar{
+    display: none;
 }

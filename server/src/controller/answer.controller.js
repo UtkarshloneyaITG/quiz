@@ -29,6 +29,7 @@ async function setcorrect_answer(s_ans) {
             attempt: s_ans.SubmitAnswers.length,
           },
           score: currentScore,
+          esc_count: s_ans.esc_count,
         },
       },
     }
@@ -47,7 +48,7 @@ const submitAnswers = async (req, res, next) => {
     const answerData = await setcorrect_answer(req.body);
     const ans_ = new Ans(answerData);
     const s_ans = await ans_.save();
-    res.status(200).json({
+    res.status(200).json({     
       message: "your answer submited successfully",
       Submits: req.body.SubmitAnswers.length,
     });
@@ -57,3 +58,4 @@ const submitAnswers = async (req, res, next) => {
 };
 
 module.exports = submitAnswers;
+

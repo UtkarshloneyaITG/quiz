@@ -1,34 +1,55 @@
-import Header from "./components/Header";
 import Home from "./pages/Home";
 import { Route, Routes } from "react-router-dom";
 import Testpage from "./pages/Testpage";
-import Login from "./components/Login";
 import ProtectedRoutes from "./Components/ProtectedRoutes";
 import Dashboard from "./pages/Dashboard";
-import SignUp from "./Components/SignUp";
-import { MyContextProvider } from "./components/AuthContext";
+import SignUp from "./Components/SignUpPage";
 import AboutPage from "./pages/About";
 import NotFound from "./Components/NotFound";
+import AdminDasbord from "./pages/AdminDasbord";
+import { AdminContextProvider } from "./provider/AdminProvider";
+import PrivateRouter from "./Components/PrivateRouter";
+import AddPeople from "./Components/addentitys";
+import { MyContextProvider } from "./provider/MyAuthProvider";
+import Navbar from "./Components/Navbar";
+import LiveUser from "./Components/LiveUser";
+import Alert from "./Components/Alert";
+import Login from "./Components/Login";
+import UserDetail from "./pages/UserDetail";
 
 const App = () => {
   return (
-    <MyContextProvider>
-      <div>
-        <Header />
+    <AdminContextProvider>
+      <MyContextProvider>
+        <Navbar />
+        <LiveUser />
         <Routes>
-          <Route index element={<Home />}></Route>
-          <Route path="/login" element={<Login />}></Route>
-          <Route path="/sigup" element={<SignUp />}></Route>
-          <Route path="/about" element={<AboutPage />}></Route>
-          <Route element={<ProtectedRoutes />}>
-            <Route path="/test" element={<Testpage />}></Route>
-            <Route path="/dashboard" element={<Dashboard />}></Route>
+          <Route index element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/about" element={<AboutPage />} />
+
+          {/*  Admin protected route */}
+          <Route element={<PrivateRouter />}>
+            <Route path="/admin/dasbord" element={<AdminDasbord />} />
+            <Route path="/admin/dasbord/addentitys" element={<AddPeople />} />
+            <Route
+              path="/admin/dasbord/user-detail/:userId"
+              element={<UserDetail />}
+            />
           </Route>
 
-          <Route path="*" element={<NotFound />}></Route>
+          {/* Normal protected routes */}
+          <Route element={<ProtectedRoutes />}>
+            <Route path="/test" element={<Testpage />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+          </Route>
+
+          <Route path="*" element={<NotFound />} />
         </Routes>
-      </div>
-    </MyContextProvider>
+        <Alert message={"Welcomes you"} color="#E9D502" onClose={() => {}} />
+      </MyContextProvider>
+    </AdminContextProvider>
   );
 };
 

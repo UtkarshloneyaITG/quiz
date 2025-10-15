@@ -3,16 +3,16 @@ const { default: mongoose } = require("mongoose");
 const Question = mongoose.Schema({
   QuestionID: {
     type: String,
-    required: true,
     unique: true,
   },
   Question: {
     type: String,
     required: true,
+    unique: true,
   },
   Answers: [
     {
-      AnswerID: { type: String, required: true, unique: true },
+      AnswerID: { type: String, unique: true },
       Answer: {
         type: String,
         required: true,
@@ -22,6 +22,12 @@ const Question = mongoose.Schema({
   CorrectAnswerID: {
     type: String,
     required: true,
+  },
+
+  QuestionType: {
+    type: String,
+    required: true,
+    default: "mcq",
   },
 });
 
