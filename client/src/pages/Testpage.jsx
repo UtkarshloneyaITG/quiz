@@ -80,7 +80,7 @@ const Testpage = () => {
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/question/all");
+        const response = await axios.get("http://localhost:5000/question/all");
         setQuestions(response.data);
         console.log(t("Questions fetched:"), response.data);
       } catch (error) {
@@ -136,7 +136,7 @@ const Testpage = () => {
       };
 
       const response = await axios.post(
-        "http://localhost:3000/question/submit_answer",
+        "http://localhost:5000/question/submit_answer",
         payload
       );
 
