@@ -1,9 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
+import TurnamentInfo from "./TurnamentInfo";
 
-function TournamentPageCard({ title, type, date, time }) {
+function TournamentPageCard({ title, type, date, time, tType }) {
+  const [showInformation, setInformation] = useState(false);
+
+  const handleClose = () => {
+    console.log("close");
+    setInformation(!showInformation);
+
+    console.log(showInformation);
+  };
+
   return (
     <div>
-      <div className="weekly-tournaments-page-card bg-gradient-to-r from-purple-500 to-purple-900 w-fit p-5 rounded-2xl relative shadow-[#0007] shadow-2xl border-2 border-purple-600">
+      {showInformation && (
+        <TurnamentInfo
+          title={title}
+          type={type}
+          date={date}
+          time={time}
+          tType={tType}
+          handleClose={handleClose}
+        />
+      )}
+
+      <div
+        onClick={() => setInformation(true)}
+        className="weekly-tournaments-page-card bg-gradient-to-r from-purple-500 to-purple-900 w-fit p-5 rounded-2xl relative shadow-[#0007] shadow-2xl border-2 border-purple-600"
+      >
         <div className="w-50 h-50">
           <img
             src="/images/Questions-bro.svg"
@@ -14,6 +38,7 @@ function TournamentPageCard({ title, type, date, time }) {
         </div>
         <div className="weekly-tournaments-page-card-title  w-[100%] p-3 absolute left-0 bottom-0 rounded-b-xl text-center z-10 bg-gradient-to-r from-emerald-500 to-emerald-900">
           {type == "wt" ? `Tournament : #01 ${title} ` : title}
+
           <div className="weekly-tournaments-page-card-rules pt-3 text-[10px] ">
             <h3>RULES</h3>
             {type == "wt" ? (

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 function TournamentSideBar() {
   return (
@@ -30,7 +31,7 @@ function TournamentSideBar() {
           </div>
           <div className="p-15 text-white other-tournament-side-bar-list">
             <ul className="flex gap-2 flex-col ">
-              <li>Leader Board</li>
+              <Link to="/leaderboard"><li>Leader Board</li></Link>
               <li>Your Rank</li>
               <li>History</li>
             </ul>

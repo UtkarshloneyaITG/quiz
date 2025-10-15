@@ -10,7 +10,7 @@ function TournamentPageHeader() {
           <div className="flex align-center justify-end bg-[#1c1241] w-fit rounded-bl-3xl">
             <div className="notification w-10 h-10 bg-[#1c1241] p-2 rounded-bl-3xl border-l-2 border-white">
               <motion.img
-                src="public/images/notification-ring-svgrepo-com.svg"
+                src="/images/notification-ring-svgrepo-com.svg"
                 alt="notification "
                 className="w-[100%] h-[100%]"
                 initial={{ rotate: 0 }}

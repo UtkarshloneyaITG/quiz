@@ -45,14 +45,16 @@ function AddMOQ({
       <div>
         <label>Correct Option (1-4):</label>
         <div className="flex gap-2">
-          {[...Array(4)].map(() => {
+          {[...Array(4)].map((a, index) => {
             return (
-              <input
-                className="h-[20px] w-[20px]"
-                type="checkbox"
-                name=""
-                id=""
-              />
+              <div className="text-2xl flex items-center ">
+                <input
+                  className="h-[20px] w-[20px]"
+                  type="checkbox"
+                  name=""
+                  id=""
+                /><div className="ml-1 pb-0.5">{index + 1}</div>
+              </div>
             );
           })}
         </div>

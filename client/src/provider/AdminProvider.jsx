@@ -7,7 +7,6 @@ import {
   fetchAllQuestions,
   deleteQuestionById,
 } from "../servics/api";
-import axios from "axios";
 
 const AdminContext = createContext();
 
@@ -31,6 +30,10 @@ export const AdminContextProvider = ({ children }) => {
 
   // set user type
   const [userType, setUserType] = useState("user");
+
+  // loding state
+
+  const [loding, setLoding] = useState(true);
 
   // Handle option input change
   const handleOptionChange = (index, value) => {
@@ -87,6 +90,8 @@ export const AdminContextProvider = ({ children }) => {
       setUsers(data.Users);
     } catch (error) {
       console.error("Failed to fetch users:", error);
+    } finally {
+      setLoding(false);
     }
   };
 
@@ -147,6 +152,7 @@ export const AdminContextProvider = ({ children }) => {
         setUser,
         setRole,
         users,
+        loding,
         setUsers,
         handleOptionChange,
         handleAddQuestion,
