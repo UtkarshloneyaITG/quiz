@@ -47,7 +47,6 @@ const App = () => {
 
           <Route path="*" element={<NotFound />} />
         </Routes>
-        <Alert message={"Welcomes you"} color="#E9D502" onClose={() => {}} />
       </MyContextProvider>
     </AdminContextProvider>
   );
