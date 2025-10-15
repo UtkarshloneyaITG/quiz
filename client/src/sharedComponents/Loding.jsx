@@ -9,7 +9,7 @@ function Loading() {
       >
         <svg
           aria-hidden="true"
-          class="inline w-10 h-10 text-gray-200 animate-spin dark:text-gray-600 fill-[#6366F1]"
+          className="inline w-10 h-10 text-gray-200 animate-spin dark:text-gray-600 fill-[#6366F1]"
           viewBox="0 0 100 101"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
@@ -23,7 +23,7 @@ function Loading() {
             fill="currentFill"
           />
         </svg>
-        <span class="sr-only">Loading...</span>
+        <span className="sr-only">Loading...</span>
       </div>
     </>
   );
