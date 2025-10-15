@@ -1,6 +1,7 @@
 import React from "react";
 import TournamentPageHeader from "./TournamentPageHeader";
 import TournamentPageCard from "./TournamentPageCard";
+import TurnamentInfo from "./TurnamentInfo";
 
 function TournamentHeroPage() {
   return (
