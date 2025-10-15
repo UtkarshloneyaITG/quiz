@@ -1,11 +1,11 @@
 // src/components/AboutPage.jsx
 import React from "react";
 import { motion } from "framer-motion";
-import aboutHero from "/public/images/aboutHero.svg";
-import teamImg from "/public/images/team.svg";
-import quizPng from "/public/images/quiz.svg";
-import connectPng from "/public/images/connect.svg";
-import brain from "/public/images/brain.svg";
+import aboutHero from "/images/aboutHero.svg";
+import teamImg from "/images/team.svg";
+import quizPng from "/images/quiz.svg";
+import connectPng from "/images/connect.svg";
+import brain from "/images/brain.svg";
 
 const fadeIn = (direction = "up", delay = 0) => {
   const variants = {
