@@ -45,7 +45,7 @@ const Dashboard = () => {
         <div className="dashboard border-1 border-white min-h-screen rounded-3xl ">
           <div className="box-heading">
             <h2 className="text-4xl text-center font-bold text-white">
-              {t("Dashboard")}
+              {t("📊 Dashboard")}
             </h2>
           </div>
           <div className="dash-content">

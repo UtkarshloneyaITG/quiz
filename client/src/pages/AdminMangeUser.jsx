@@ -86,8 +86,11 @@ function AdminMangeUser() {
                       {v.fullName}
                     </td>
                     <td className="border border-white px-4 py-2">{v.role}</td>
-                    <td className="border border-white px-4 py-2">
-                      <Link to={`/admin/dasbord/user-detail/${v._id}`}>
+                    <td className="border border-white p-0 transition-all hover:font-bold hover:bg-green-600 ">
+                      <Link
+                        className="inline-block text-center w-[100%] px-4 py-2 "
+                        to={`/admin/dasbord/user-detail/${v._id}`}
+                      >
                         view
                       </Link>
                     </td>
@@ -97,7 +100,7 @@ function AdminMangeUser() {
                         v._id == user._id
                           ? "cursor-not-allowed  bg-green-900 hover:bg-green-500 "
                           : "cursor-pointer bg-purple-900 hover:bg-red-600"
-                      }   border  text-center  font-bold  border-white px-4 py-2`}
+                      }   border transition-all  text-center  font-bold  border-white px-4 py-2`}
                     >
                       Delete
                     </td>
