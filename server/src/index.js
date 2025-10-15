@@ -16,4 +16,9 @@ app.use(cookieParser());
 app.use("/api/auth/user", authRouter);
 app.use("/question", questionRouter);
 
+app.use(express.static(path.join(__dirname, "../client/dist")));
+
+app.use("/{*any}", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/dist/index.html"));
+});
 module.exports = app;

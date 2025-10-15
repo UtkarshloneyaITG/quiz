@@ -1,7 +1,8 @@
 {
   "name": "quiz-demo",
   "version": "1.0.0",
-  "type": "commonjs",
+ "type": "module",
+  
   "scripts": {
     "dev": "concurrently \"npm run dev-server\" \"npm run dev-client\"",
     "dev-server": "nodemon server/server.js",
@@ -29,6 +30,7 @@
     "react-router-dom": "^7.9.3"
   },
   "devDependencies": {
+    "@flydotio/dockerfile": "^0.7.10",
     "autoprefixer": "^10.4.21",
     "concurrently": "^9.2.1",
     "nodemon": "^3.1.10",
