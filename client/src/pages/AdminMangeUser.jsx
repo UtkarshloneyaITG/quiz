@@ -1,8 +1,8 @@
 import React from "react";
 import { useAdminFunctions } from "../provider/AdminProvider";
-
 import { memo } from "react";
 import { Link } from "react-router-dom";
+import Loading from "../sharedComponents/Loding";
 
 function AdminMangeUser() {
   const {
@@ -13,6 +13,7 @@ function AdminMangeUser() {
     userType,
     handleUserType,
     handleUserDelete,
+    loding,
   } = useAdminFunctions();
 
   //console.log(users.length);
@@ -25,7 +26,7 @@ function AdminMangeUser() {
           <h2 className="text-2xl font-bold mb-4">User Management</h2>
 
           {/* Add New User */}
-          <div className="mb-6">
+          <div className="mb-6 relative">
             <h3 className="text-lg mb-2">Admin</h3>
             <input
               type="text"
@@ -65,7 +66,9 @@ function AdminMangeUser() {
               </tr>
             </thead>
             <tbody>
-              {users.length == 0 ? (
+              {loding ? (
+                <Loading />
+              ) : users.length == 0 ? (
                 <tr>
                   <th className="border border-white px-4 py-2">--</th>
                   <th className="border border-white px-4 py-2">--</th>
