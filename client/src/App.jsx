@@ -16,6 +16,7 @@ import LiveUser from "./Components/LiveUser";
 import Alert from "./Components/Alert";
 import Login from "./Components/Login";
 import UserDetail from "./pages/UserDetail";
+import TournamentPage from "./pages/TournamentPage";
 
 const App = () => {
   return (
@@ -41,6 +42,7 @@ const App = () => {
 
           {/* Normal protected routes */}
           <Route element={<ProtectedRoutes />}>
+            <Route path="/tournament" element={<TournamentPage />} />
             <Route path="/test" element={<Testpage />} />
             <Route path="/dashboard" element={<Dashboard />} />
           </Route>
