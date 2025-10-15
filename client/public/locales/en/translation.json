@@ -2,7 +2,7 @@
   "language_selector_title": "Select Language",
   "Select": "Select",
   "Start Quiz": "Start Quiz",
-  "Dashboard": "📊 Dashboard",
+  "📊 Dashboard": "📊 Dashboard",
   "Error attempting to enable fullscreen": "Error attempting to enable fullscreen",
   "Questions fetched:": "Questions fetched:",
   "Error fetching questions:": "Error fetching questions:",
@@ -22,5 +22,7 @@
   "Next ▶": "Next ▶",
   "No questions found.": "No questions found.",
   "Manage Users": "Manage Users",
-  "Settings": "Settings"
+  "Settings": "Settings",
+  "📝 Tournament": "📝 Tournament",
+  "📝 Practise Quiz": "📝 Practise Quiz"
 }
