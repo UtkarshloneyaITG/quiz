@@ -1,11 +1,12 @@
 import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
-import { dashboard } from "../servics/api";
+import { dashboard, deleteByEmail } from "../servics/api";
 
 import { useTranslation } from "react-i18next";
 import Loading from "../sharedComponents/Loding";
 import { useMyFunctions } from "../provider/MyAuthProvider";
+import { MdDelete } from "react-icons/md";
 
 const Dashboard = () => {
   const [data, setData] = useState({});
@@ -37,6 +38,15 @@ const Dashboard = () => {
     );
   };
 
+  const handleDeleteHistory = async () => {
+    try {
+      const res = await deleteByEmail(data.email);
+      console.log(res);
+    } catch (error) {
+      console.log("Error deleting history:", error);
+    }
+  };
+
   return (
     <div className="test-wrapper relative bg-[#2a1e55] w-full min-h-screen">
       {loding ? (
@@ -59,10 +69,22 @@ const Dashboard = () => {
                   />
                 </div>
               </div>
-              <div className="details text-2xl font-semibold text-white flex flex-col gap-5 self-center">
-                <div className="person-name">Name : {data.fullName}</div>
-                <div className="person-email">Email : {data.email}</div>
-                <div className="person-class">Class : {data.userClass}</div>
+              <div className="flex w-full justify-between">
+                <div className="details text-2xl font-semibold text-white flex flex-col gap-5 self-center">
+                  <div className="person-name">Name : {data.fullName}</div>
+                  <div className="person-email">Email : {data.email}</div>
+                  <div className="person-class">Class : {data.userClass}</div>
+                </div>
+
+                <div className="flex text-white gap-2 self-center text-2xl font-semibold">
+                  <p>Delete History</p>
+                  <button
+                    onClick={handleDeleteHistory}
+                    className="self-center hover:text-red-500 transition-all cursor-pointer"
+                  >
+                    <MdDelete className="text-3xl" />
+                  </button>
+                </div>
               </div>
             </div>
             <div className="scores">

@@ -113,3 +113,16 @@ export const deleteQuestionById = async (QuestionID) => {
     console.error("Failed to delete question:", error);
   }
 };
+
+export const deleteByEmail = async (email) => {
+  try {
+    const res = await axios.post(`${BASE_URL}/api/user/deleteHistory`, {
+      email,
+    });
+
+    const data = res.data;
+    return data;
+  } catch (error) {
+    console.error("Failed to delete question:", error);
+  }
+};

@@ -5,6 +5,7 @@ require("dotenv").config();
 
 const authRouter = require("./routes/authRouter");
 const questionRouter = require("./routes/questionRouter");
+const userRouter = require("./routes/userRouter");
 
 const app = express();
 
@@ -15,6 +16,7 @@ function appSetup(app) {
 
   app.use("/api/auth/user", authRouter);
   app.use("/question", questionRouter);
+  app.use("/api/user", userRouter);
 }
 
 // Just export, no need to call routes above again
