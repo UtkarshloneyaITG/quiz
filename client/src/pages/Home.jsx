@@ -8,11 +8,10 @@ import HeroText from "../Components/HeroText";
 
 const Home = () => {
   return (
-    <div >
-      <Background/>
-      <HeroText/>
+    <div>
+        <Background />
+        <HeroText />
       <SelectCard />
-
     </div>
   );
 };
