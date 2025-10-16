@@ -8,20 +8,20 @@ const Que = require("../model/questionModel");
 // this function filter the answers and assign score to email
 async function setcorrect_answer(s_ans) {
   let score = 0;
-  let TypeTCO = s_ans.TypeTCO;
-  let TypeMCQ = s_ans.TypeMCQ;
-  const array_of_questions = questions;
-  const MCQ_que = array_of_questions.filter(
-    (value) => value.QuestionType == "mcq"
-  );
-  const TOC_que = array_of_questions.filter(
-    (value) => value.QuestionType == "tcq"
-  );
-  let answersTCO = TypeTCO.SubmitAnswers.filter((first_arr) =>
-    TOC_que.some(
-      (sec_arr) =>
-        first_arr.QuestionID == sec_arr.QuestionID &&
-        first_arr.AnswerID == sec_arr.CorrectAnswerID
+
+  let TypeTCO = s_ans.TypeTCO || { SubmitAnswers: [] };
+  let TypeMCQ = s_ans.TypeMCQ || { SubmitAnswers: [] };
+  let TypeSubjective = s_ans.TypeSubjective || {SubmitAnswers: [] }
+  const questions = await Que.find({}).lean();
+  const MCQ_que = questions.filter((q) => q.QuestionType === "mcq");
+  const TCO_que = questions.filter((q) => q.QuestionType === "tco");
+
+  //  For TCO type
+  const answersTCO = TypeTCO.SubmitAnswers.filter((submitted) =>
+    TCO_que.some(
+      (question) =>
+        submitted.QuestionID === question.QuestionID &&
+        submitted.AnswerID === question.CorrectAnswerID
     )
   ); 
   //  For MCQ type
@@ -48,12 +48,12 @@ async function setcorrect_answer(s_ans) {
     };
   }).filter(Boolean);
 
-const simpleOBJ = answersMCQ.map((ele)=>{
+  const simpleOBJ = answersMCQ.map((ele) => {
     return {
-        QuestionID : ele.QuestionID,
-        AnswerID : ele.correctAnswers
-    }
-})
+      QuestionID: ele.QuestionID,
+      AnswerID: ele.correctAnswers,
+    };
+  });
 
   score = Math.max(0, score + answersTCO.length);
 
@@ -96,6 +96,7 @@ const submitAnswers = async (req, res, next) => {
   try {
     const answerData = await setcorrect_answer(req.body);
     const ans_ = new Ans(answerData);
+    
     const s_ans = await ans_.save();
     res.status(200).json({
       message: "your answer submited successfully",

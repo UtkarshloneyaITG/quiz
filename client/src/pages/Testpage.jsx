@@ -6,10 +6,12 @@ import { useTranslation } from "react-i18next";
 import MCQ from "./questionsType/MCQ";
 import STQ from "./questionsType/STQ";
 import MOQ from "./questionsType/MOQ";
+import { useAlert } from "../servics/ApiChanger";
 
 const Testpage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { showAlert } = useAlert();
 
   const [Questions, setQuestions] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -64,6 +66,7 @@ const Testpage = () => {
         const res = await axios.get("http://localhost:5000/question/all");
         setQuestions(res.data);
       } catch (err) {
+        showAlert(`"Error fetching questions:", ${err}`, "#e31814");
         console.error("Error fetching questions:", err);
       } finally {
         setLoading(false);
@@ -119,8 +122,8 @@ const Testpage = () => {
 
     const TypeTCO = {
       SubmitAnswers: Object.entries(tcoAnswers).map(
-        ([QuestionId, AnswerID]) => ({
-          QuestionId,
+        ([QuestionID, AnswerID]) => ({
+          QuestionID,
           AnswerID,
         })
       ),
@@ -128,8 +131,8 @@ const Testpage = () => {
 
     const TypeMCQ = {
       SubmitAnswers: Object.entries(mcqAnswers).map(
-        ([QuestionId, AnswerID]) => ({
-          QuestionId,
+        ([QuestionID, AnswerID]) => ({
+          QuestionID,
           AnswerID,
         })
       ),
@@ -137,8 +140,8 @@ const Testpage = () => {
 
     const TypeSubjective = {
       SubmitAnswers: Object.entries(subjectiveAnswers).map(
-        ([QuestionId, { Question, Answer }]) => ({
-          QuestionId,
+        ([QuestionID, { Question, Answer }]) => ({
+          QuestionID,
           Question,
           Answer,
         })
@@ -157,11 +160,13 @@ const Testpage = () => {
 
     try {
       await axios.post("http://localhost:5000/question/submit_answer", body);
-      alert(t("Test submitted successfully!"));
+      // t("Test submitted successfully!");
+
+      showAlert(`Test submitted successfully!`, "#14e32c");
       navigate("/dashboard");
     } catch (error) {
       console.error("Error submitting test:", error);
-      alert(t("Error submitting test"));
+      showAlert(`"Error submitting test:", ${error}`, "#e31814");
     }
   };
 
