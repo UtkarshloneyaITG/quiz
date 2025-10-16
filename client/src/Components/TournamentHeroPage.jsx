@@ -7,7 +7,7 @@ function TournamentHeroPage() {
   return (
     <>
       <div className="Tournament-page-wrapper w-[100%] h-[100%] bg-[#c27aff] pl-20 ">
-        <div className="h-[calc(100vh_-_60px)] overflow-auto no-scrollbar">
+        <div className="h-[calc(100vh_-_60px)] overflow-auto no-scrollbar ">
           <TournamentPageHeader />
           <div
             className="weekly-tournaments-page p-10  border-b-2 rounded-2xl"
