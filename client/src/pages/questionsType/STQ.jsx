@@ -1,18 +1,20 @@
 import React from "react";
 
-function STQ({ currentQuestion }) {
+function STQ({ currentQuestion, handleSubjectiveChange }) {
   return (
-    <>
-      <div className="options mb-6">
-        <div className="flex bg-zinc-500 text-green-400 font-semibold flex-col gap-2 rounded">
-          <textarea
-            name={`question_${currentQuestion.QuestionID}`}
-            id=""
-            className="resize-none outline-none rounded p-2 h-[300px]"
-          ></textarea>
-        </div>
-      </div>
-    </>
+    <div className="options mb-6">
+      <textarea
+        className="resize-none outline-none rounded p-2 h-[250px] w-full"
+        placeholder="Type your answer here..."
+        onChange={(e) =>
+          handleSubjectiveChange(
+            currentQuestion.QuestionID,
+            currentQuestion.Question,
+            e.target.value
+          )
+        }
+      ></textarea>
+    </div>
   );
 }
 
