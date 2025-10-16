@@ -116,6 +116,8 @@ export const deleteQuestionById = async (QuestionID) => {
   }
 };
 
+//  get user by it's unique id
+
 export const getUserDetailsById = async (_id) => {
   try {
     console.log("userId", _id);

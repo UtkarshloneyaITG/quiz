@@ -17,17 +17,17 @@ const questionSchema = new mongoose.Schema({
   },
   Answers: {
     type: [answerSchema],
-    required: false, 
+    required: false,
+  },
   CorrectAnswerID: {
     type: String,
-    required: false, 
+    required: false,
   },
   QuestionType: {
     type: String,
     required: true,
     default: "mcq",
   },
-}
 });
 
 const Que = mongoose.model("questions", questionSchema);
