@@ -1,6 +1,7 @@
 const User = require("../model/authModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const Ans = require("../model/answerModel");
 require("dotenv").config();
 
 const jwtToken = process.env.JWT_S;
@@ -108,6 +109,10 @@ exports.dashboard = async (req, res) => {
     email,
   });
 
+  const scoreHistory = await Ans.findOne({ Email: email });
+
+  console.log(scoreHistory);
+
   if (!myUser) {
     return res.status(400).json({
       msg: "user not valid",
@@ -121,7 +126,7 @@ exports.dashboard = async (req, res) => {
       email: myUser.email,
       fullName: myUser.fullName,
       userClass: myUser.userClass,
-      scoreHistory: myUser.scoreHistory,
+      scoreHistory,
       phoneNumber: myUser.phoneNumber,
     },
   });

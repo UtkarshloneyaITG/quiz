@@ -25,10 +25,10 @@ function UserDetail() {
   }
 
   return (
-    <div className="h-screen  bg-gradient-to-r from-purple-900 via-pink-800 to-purple-700 animate-gradient ">
+    <div className="h-screen  bg-[#26134f] animate-gradient ">
       <div
-        className="w-fit flex items-start justify-center gap-1 flex-col text-xl p-4 text-black
-       font-extrabold  opacity-90 absolute bottom-[11rem] right-[10rem]"
+        className="w-fit flex items-start justify-center gap-1 flex-col text-xl p-4 text-white
+       font-extrabold  opacity-90"
       >
         <h1>
           Name : <span>{crrUer.fullName}</span>

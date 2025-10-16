@@ -20,6 +20,8 @@ const Dashboard = () => {
     try {
       const user = JSON.parse(localStorage.getItem("user")) || {};
       const userData = await dashboard(user.email);
+
+      console.log("userdata", userData);
       setData(userData.userData);
       setScore(userData.userData.scoreHistory);
     } catch (error) {
@@ -94,7 +96,7 @@ const Dashboard = () => {
 
                 <p className="pr-[50px] text-right">Detail</p>
               </div>
-              {score.map((s, index) => {
+              {/* {score.map((s, index) => {
                 const dateObj = new Date(s.submitedON);
 
                 const date = dateObj.toLocaleDateString();
@@ -129,7 +131,7 @@ const Dashboard = () => {
                     </div>
                   </div>
                 );
-              })}
+              })} */}
               <div className="scores-content"></div>
             </div>
           </div>
