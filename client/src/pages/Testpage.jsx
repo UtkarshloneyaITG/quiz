@@ -6,145 +6,168 @@ import { useTranslation } from "react-i18next";
 import MCQ from "./questionsType/MCQ";
 import STQ from "./questionsType/STQ";
 import MOQ from "./questionsType/MOQ";
+import { useAlert } from "../servics/ApiChanger";
 
 const Testpage = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { showAlert } = useAlert();
 
-  const [showPopup, setShowPopup] = useState(false);
   const [Questions, setQuestions] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [selectedAnswers, setSelectedAnswers] = useState({});
-  const [selectMcq, setSelectMcq] = useState([]);
   const [loading, setLoading] = useState(true);
+
   const [tabHiddenCount, setTabHiddenCount] = useState(0);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (document.hidden) {
-        setTabHiddenCount((prevCount) => prevCount + 1);
-      }
-    };
-
-    document.addEventListener("visibilitychange", handleVisibilityChange);
-
-    return () => {
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
-    };
-  }, []);
-
   const [escapePressed, setEscapePressed] = useState(false);
 
+  // 🟩 Separate states for all question types
+  const [tcoAnswers, setTcoAnswers] = useState({});
+  const [mcqAnswers, setMcqAnswers] = useState({});
+  const [subjectiveAnswers, setSubjectiveAnswers] = useState({});
+
+  // -------------------- Effects ----------------------
   useEffect(() => {
+    // Track tab changes
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        setTabHiddenCount((prev) => prev + 1);
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () =>
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+  }, []);
+
+  useEffect(() => {
+    // Track ESC press
     const handleKeyDown = (event) => {
       if (event.key === "Escape" || event.keyCode === 27) {
         setEscapePressed(true);
-      } else {
-        setEscapePressed(false);
       }
     };
-
     document.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
+    return () => document.removeEventListener("keydown", handleKeyDown);
   }, []);
 
+  // Fullscreen
   const elementRef = useRef(null);
-  const [isFullScreen, setIsFullScreen] = useState(false);
-
   useEffect(() => {
     if (elementRef.current && !document.fullscreenElement) {
-      elementRef.current
-        .requestFullscreen()
-        .then(() => {
-          setIsFullScreen(true);
-        })
-        .catch((err) => {
-          console.error(
-            `${t("Error attempting to enable fullscreen")}: ${err.message}` // ✅ t() जोड़ा गया
-          );
-        });
-    } else {
-      setEscapePressed(true);
+      elementRef.current.requestFullscreen().catch((err) => {
+        console.error(`${t("Error enabling fullscreen")}: ${err.message}`);
+      });
     }
-  });
-
-  useEffect(() => {
-    setShowPopup(true);
   }, []);
 
+  // Fetch Questions
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/question/all");
-        setQuestions(response.data);
-        console.log(t("Questions fetched:"), response.data);
-      } catch (error) {
-        console.error(t("Error fetching questions:"), error);
+        const res = await axios.get("http://localhost:5000/question/all");
+        setQuestions(res.data);
+      } catch (err) {
+        showAlert(`"Error fetching questions:", ${err}`, "#e31814");
+        console.error("Error fetching questions:", err);
       } finally {
         setLoading(false);
       }
     };
-
     fetchQuestions();
   }, []);
 
-  // Hide popup and start test
-  const handleStart = () => {
-    setShowPopup(false);
-  };
+  // -------------------- Handlers ----------------------
 
-  // Next Question
   const handleNext = () => {
     setCurrentIndex((prev) => Math.min(prev + 1, Questions.length - 1));
   };
 
-  // Previous Question
   const handlePrev = () => {
     setCurrentIndex((prev) => Math.max(prev - 1, 0));
   };
 
-  // When user selects an answer
-  const AnswerSelect = (questionId, answerId) => {
-    setSelectedAnswers((prev) => ({
+  //  For single correct (TCO)
+  const handleTcoSelect = (questionId, answerId) => {
+    setTcoAnswers((prev) => ({
       ...prev,
       [questionId]: answerId,
     }));
   };
 
-  //  Submit all selected answers at once
+  //  For multiple correct (MCQ)
+  const handleMcqSelect = (questionId, answerId) => {
+    setMcqAnswers((prev) => {
+      const prevAnswers = prev[questionId] || [];
+      const isSelected = prevAnswers.includes(answerId);
+      return {
+        ...prev,
+        [questionId]: isSelected
+          ? prevAnswers.filter((id) => id !== answerId)
+          : [...prevAnswers, answerId],
+      };
+    });
+  };
+
+  //  For Subjective Questions
+  const handleSubjectiveChange = (questionId, questionText, answerText) => {
+    setSubjectiveAnswers((prev) => ({
+      ...prev,
+      [questionId]: { Question: questionText, Answer: answerText },
+    }));
+  };
+
+  // ✅ Submit handler
   const handleSubmit = async () => {
     const user = JSON.parse(localStorage.getItem("user"));
-    const userEmail = user.email;
-    console.log(userEmail);
-    try {
-      // Convert selectedAnswers object → array of objects
-      const formattedAnswers = Object.entries(selectedAnswers).map(
+    const userEmail = user?.email || "test@example.com";
+
+    const TypeTCO = {
+      SubmitAnswers: Object.entries(tcoAnswers).map(
         ([QuestionID, AnswerID]) => ({
           QuestionID,
           AnswerID,
         })
-      );
+      ),
+    };
 
-      const payload = {
-        Email: userEmail,
-        SubmitAnswers: formattedAnswers,
-      };
+    const TypeMCQ = {
+      SubmitAnswers: Object.entries(mcqAnswers).map(
+        ([QuestionID, AnswerID]) => ({
+          QuestionID,
+          AnswerID,
+        })
+      ),
+    };
 
-      const response = await axios.post(
-        "http://localhost:5000/question/submit_answer",
-        payload
-      );
+    const TypeSubjective = {
+      SubmitAnswers: Object.entries(subjectiveAnswers).map(
+        ([QuestionID, { Question, Answer }]) => ({
+          QuestionID,
+          Question,
+          Answer,
+        })
+      ),
+    };
 
-      console.log(t("Test submitted successfully:"), response.data);
-      alert(t("Test submitted successfully!"));
+    const body = {
+      Email: userEmail,
+      TypeTCO,
+      TypeMCQ,
+      TypeSubjective,
+      esc_count: tabHiddenCount,
+    };
+
+    console.log("Payload:", body);
+
+    try {
+      await axios.post("http://localhost:5000/question/submit_answer", body);
+      // t("Test submitted successfully!");
+
+      showAlert(`Test submitted successfully!`, "#14e32c");
+      navigate("/dashboard");
     } catch (error) {
-      console.error(t("Error submitting test:"), error);
-      alert(t("Something went wrong while submitting test."));
+      console.error("Error submitting test:", error);
+      showAlert(`"Error submitting test:", ${error}`, "#e31814");
     }
-    navigate("/dashboard");
   };
 
   const currentQuestion = Questions[currentIndex];
@@ -155,103 +178,78 @@ const Testpage = () => {
       ref={elementRef}
     >
       <TimerFunc onTimeUp={handleSubmit} />
+
       <div className="flex mb-5 gap-5 justify-center">
-        <p className="page-tracker text-white p-3 rounded-3xl bg-violet-950 shadow-2xs shadow-black ">
-          {t("Tab Change")} :-{tabHiddenCount}
+        <p className="text-white p-3 rounded-3xl bg-violet-950">
+          {t("Tab Change")} : {tabHiddenCount}
         </p>
-        <p className="page-tracker text-white p-3 rounded-3xl bg-violet-950 shadow-2xs shadow-black ">
-          {t("Exit Screen")}: {escapePressed ? t("yes") : t("no")}{" "}
+        <p className="text-white p-3 rounded-3xl bg-violet-950">
+          {t("Exit Screen")}: {escapePressed ? "Yes" : "No"}
         </p>
       </div>
 
       <div className="test-box max-w-4xl mx-auto bg-[#3a2e6a] p-6 rounded-2xl shadow-lg">
-        <div className="box-heading mb-6">
-          <h2 className="text-4xl text-center font-bold text-white">
-            {t("Start Test")}
-          </h2>
-        </div>
+        <h2 className="text-3xl text-center text-white font-bold mb-6">
+          {t("Start Test")}
+        </h2>
 
-        <div className="test-content mt-4">
-          {loading ? (
-            <p className="text-white text-center">
-              {t("Loading questions...")}
-            </p>
-          ) : Questions.length > 0 && currentQuestion ? (
-            <>
-              {
-                <>
-                  <div className="question-box h-[100px] mb-4">
-                    <h3 className="text-2xl font-semibold text-white">
-                      {t("Question")} {currentIndex + 1}:{" "}
-                      {currentQuestion.Question}{" "}
-                    </h3>
-                  </div>
-                  {currentQuestion.QuestionType == "tco" ? (
-                    <MCQ
-                      currentIndex={currentIndex}
-                      currentQuestion={currentQuestion}
-                      handlePrev={handlePrev}
-                      handleSubmit={handleSubmit}
-                      handleNext={handleNext}
-                      selectedAnswers={selectedAnswers}
-                      Questions={Questions}
-                      AnswerSelect={AnswerSelect}
-                    />
-                  ) : currentQuestion.QuestionType == "mcq" ? (
-                    <MOQ
-                      currentIndex={currentIndex}
-                      currentQuestion={currentQuestion}
-                      handlePrev={handlePrev}
-                      handleSubmit={handleSubmit}
-                      handleNext={handleNext}
-                      selectMcq={selectMcq}
-                      Questions={Questions}
-                      AnswerSelect={AnswerSelect}
-                    />
-                  ) : (
-                    <STQ
-                      currentIndex={currentIndex}
-                      currentQuestion={currentQuestion}
-                      handlePrev={handlePrev}
-                      handleSubmit={handleSubmit}
-                      handleNext={handleNext}
-                      selectedAnswers={selectedAnswers}
-                      Questions={Questions}
-                      AnswerSelect={AnswerSelect}
-                    />
-                  )}
-                </>
-              }
-            </>
-          ) : (
-            <p className="text-white text-center">{t("No questions found.")}</p>
-          )}
+        {loading ? (
+          <p className="text-white text-center">{t("Loading questions...")}</p>
+        ) : Questions.length > 0 && currentQuestion ? (
+          <>
+            <div className="mb-4">
+              <h3 className="text-2xl text-white font-semibold">
+                {t("Question")} {currentIndex + 1}: {currentQuestion.Question}
+              </h3>
+            </div>
 
-          <div className="buttons flex justify-between items-center">
-            <button
-              className="prev-btn font-bold text-white px-4 py-2 bg-[#443577] rounded disabled:opacity-50"
-              onClick={handlePrev}
-              disabled={currentIndex === 0}
-            >
-              {t("◀ Previous")}
-            </button>
+            {currentQuestion.QuestionType === "tco" ? (
+              <MCQ
+                currentQuestion={currentQuestion}
+                selectedAnswers={tcoAnswers}
+                AnswerSelect={handleTcoSelect}
+              />
+            ) : currentQuestion.QuestionType === "mcq" ? (
+              <MOQ
+                currentQuestion={currentQuestion}
+                mcqAnswers={mcqAnswers}
+                setmcqSelectedAnswers={handleMcqSelect}
+              />
+            ) : (
+              <STQ
+                currentQuestion={currentQuestion}
+                handleSubjectiveChange={handleSubjectiveChange}
+              />
+            )}
 
-            <button
-              className="sub-btn font-bold px-4 py-2 bg-green-500 text-black rounded"
-              onClick={handleSubmit}
-            >
-              {t("Submit")}
-            </button>
+            <div className="buttons flex justify-between mt-4">
+              <button
+                onClick={handlePrev}
+                disabled={currentIndex === 0}
+                className="bg-[#443577] px-4 py-2 rounded text-white font-bold disabled:opacity-50"
+              >
+                ◀ {t("Previous")}
+              </button>
 
-            <button
-              className="next-btn font-bold text-white px-4 py-2 bg-[#443577] rounded disabled:opacity-50"
-              onClick={handleNext}
-              disabled={currentIndex === Questions.length - 1}
-            >
-              {t("Next ▶")}
-            </button>
-          </div>
-        </div>
+              <button
+                onClick={handleSubmit}
+                className="bg-green-500 px-4 py-2 rounded text-black font-bold"
+              >
+                {t("Submit")}
+              </button>
+
+              <button
+                onClick={handleNext}
+                disabled={currentIndex === Questions.length - 1}
+                className="bg-[#443577] px-4 py-2 rounded text-white font-bold disabled:opacity-50"
+              >
+                {t("Next")} ▶
+              </button>
+            </div>
+          </>
+        ) : (
+          <p className="text-white text-center">{t("No questions found.")}</p>
+        )}
       </div>
     </div>
   );

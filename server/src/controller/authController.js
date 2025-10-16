@@ -320,17 +320,21 @@ exports.deleteAccByEamil = async (req, res, next) => {
   try {
     const { email } = req.body;
 
-    const user = await User.deleteOne({ email: email });
+    console.log(email);
+
+    const user = await User.deleteOne({ email });
+
+    console.log(user);
 
     if (!user) {
       return res.status(400).json({
         msg: `user ${email} not found`,
       });
-
-      res.status(200).json({
-        msg: "your account deleted succsefully",
-      });
     }
+
+    res.status(200).json({
+      msg: "your account deleted succsefully",
+    });
   } catch (error) {
     next(error);
   }

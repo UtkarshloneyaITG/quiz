@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 
 function TournamentSideBar() {
   return (
-    <div>
+    <div className=" bg-purple-800 " style={{ background: '#1C1241' }}
+>
       <div className="Tournament-s-de-bar-wrapper ">
         <div
           className="w-80 h-160 absolute left-0 top-[-1px] "
@@ -37,7 +38,7 @@ function TournamentSideBar() {
             </ul>
           </div>
         </div>
-        <div className="w-62.5 h-[calc(100vh_-_100px)] bg-[#1c1241]"></div>
+        <div className="w-62.5 h-[100%)] bg-[#1c1241]"></div>
       </div>
     </div>
   );

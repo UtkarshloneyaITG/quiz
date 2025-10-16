@@ -97,6 +97,7 @@ const submitAnswers = async (req, res, next) => {
       });
     }
     const ans_ = new Ans(answerData);
+    
     const s_ans = await ans_.save();
     res.status(200).json({
       message: "your answer submited successfully",
