@@ -164,7 +164,7 @@ export const addSubjectiveQustion = async (question) => {
   }
 };
 
-// delet a single history
+// delete a single history
 
 export const deleteSingleHistory = async (email, historyIndex) => {
   try {
