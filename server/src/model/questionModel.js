@@ -1,6 +1,11 @@
-const { default: mongoose } = require("mongoose");
+const mongoose = require("mongoose");
 
-const Question = mongoose.Schema({
+const answerSchema = new mongoose.Schema({
+  AnswerID: { type: String, required: false },
+  Answer: { type: String, required: false },
+});
+
+const questionSchema = new mongoose.Schema({
   QuestionID: {
     type: String,
     unique: true,
@@ -10,27 +15,20 @@ const Question = mongoose.Schema({
     required: true,
     unique: true,
   },
-  Answers: [
-    {
-      AnswerID: { type: String, unique: true },
-      Answer: {
-        type: String,
-        required: true,
-      },
-    },
-  ],
+  Answers: {
+    type: [answerSchema],
+    required: false, 
   CorrectAnswerID: {
     type: String,
-    required: true,
+    required: false, 
   },
-
   QuestionType: {
     type: String,
     required: true,
     default: "mcq",
   },
+}
 });
 
-const Que = mongoose.model("questions", Question);
-
+const Que = mongoose.model("questions", questionSchema);
 module.exports = Que;

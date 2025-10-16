@@ -4,14 +4,15 @@ import SelectCard from "../Components/SelectCard";
 import { memo } from "react";
 import Alert from "../Components/Alert";
 // import ShapeChangingLoader from "../Components/loader";
+import HeroText from "../Components/HeroText";
 
 const Home = () => {
   return (
-    <div>
-      {/* <ShapeChangingLoader /> */}
-          <Alert message={"Your Welcome"} color="#006400" />
-      <Background />
+    <div >
+      <Background/>
+      <HeroText/>
       <SelectCard />
+
     </div>
   );
 };

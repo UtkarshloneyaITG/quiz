@@ -45,6 +45,7 @@ exports.registerUser = async (req, res) => {
       userClass: newUser.userClass,
       scoreHistory: newUser.scoreHistory,
       token,
+      role: newUser.role,
     },
   });
 };
@@ -132,12 +133,15 @@ exports.Deleteuser = async (req, res) => {
     if (!deletedUser) {
       return res.status(404).json({ msg: "User Not Found" });
     } else {
-      res.status(200).json({ msg: "User Deleted Successfully" });
+      res
+        .status(200)
+        .json({ msg: `User ${deletedUser.fullName} Successfully` });
     }
   } catch (error) {
     console(error);
   }
 };
+
 exports.UsersFetchingData = async (req, res, next) => {
   try {
     const { role } = req.body;
@@ -213,6 +217,7 @@ exports.updateUser = async (req, res) => {
     next(error);
   }
 };
+
 exports.FindUser = async (req, res, next) => {
   try {
     const userEmaill = await User.findOne({ email: req.body.email });
@@ -306,6 +311,26 @@ exports.getUserById = async (req, res, next) => {
       msg: "user find successfully",
       user,
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.deleteAccByEamil = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+
+    const user = await User.deleteOne({ email: email });
+
+    if (!user) {
+      return res.status(400).json({
+        msg: `user ${email} not found`,
+      });
+
+      res.status(200).json({
+        msg: "your account deleted succsefully",
+      });
+    }
   } catch (error) {
     next(error);
   }

@@ -7,7 +7,6 @@ import {
   fetchAllQuestions,
   deleteQuestionById,
 } from "../servics/api";
-import axios from "axios";
 
 const AdminContext = createContext();
 
@@ -31,6 +30,10 @@ export const AdminContextProvider = ({ children }) => {
 
   // set user type
   const [userType, setUserType] = useState("user");
+
+  // loding state
+
+  const [loding, setLoding] = useState(true);
 
   // Handle option input change
   const handleOptionChange = (index, value) => {
@@ -73,7 +76,7 @@ export const AdminContextProvider = ({ children }) => {
       setUser(parsedUser);
       setRole(parsedUser.role);
     }
-  }, []);
+  }, [role]);
 
   // Fetch all users from API on mount
   const handleUserType = (v) => {
@@ -87,6 +90,8 @@ export const AdminContextProvider = ({ children }) => {
       setUsers(data.Users);
     } catch (error) {
       console.error("Failed to fetch users:", error);
+    } finally {
+      setLoding(false);
     }
   };
 
@@ -95,16 +100,16 @@ export const AdminContextProvider = ({ children }) => {
   }, [userType]);
 
   const handleUserDelete = async (otherUserId, adminId) => {
-    const { showAlert } = useAlert();
+    // const { showAlert } = useAlert();
     if (otherUserId == adminId) {
       showAlert("your are not deleted yourshelf", "#CE2029");
       return;
     }
 
     const data = await deleteUserById(otherUserId);
-    showAlert("user Deletion Successfull", "#CE2029");
+    showAlert("user Deletion Successfull", "#24fc03");
     console.log(data.msg);
-    showAlert(data.msg, "#E9D502");
+    showAlert(data.msg, "#24fc03");
     fetchUsers();
   };
 
@@ -147,6 +152,7 @@ export const AdminContextProvider = ({ children }) => {
         setUser,
         setRole,
         users,
+        loding,
         setUsers,
         handleOptionChange,
         handleAddQuestion,

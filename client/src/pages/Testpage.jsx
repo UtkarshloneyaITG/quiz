@@ -2,24 +2,22 @@ import TimerFunc from "../Components/TimeFun";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-// ✅ i18next hook import करें
 import { useTranslation } from "react-i18next";
 import MCQ from "./questionsType/MCQ";
 import STQ from "./questionsType/STQ";
-//import { FullScreen, useFullScreenHandle } from "react-full-screen";
+import MOQ from "./questionsType/MOQ";
 
 const Testpage = () => {
-  // ✅ useTranslation hook का उपयोग करें
   const { t } = useTranslation();
 
   const [showPopup, setShowPopup] = useState(false);
   const [Questions, setQuestions] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState({});
+  const [selectMcq, setSelectMcq] = useState([]);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
-
   const [tabHiddenCount, setTabHiddenCount] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleVisibilityChange = () => {
@@ -140,32 +138,29 @@ const Testpage = () => {
         payload
       );
 
-      console.log(t("Test submitted successfully:"), response.data); //  t() जोड़ा गया
-      alert(t("Test submitted successfully!")); //  t() जोड़ा गया
+      console.log(t("Test submitted successfully:"), response.data);
+      alert(t("Test submitted successfully!"));
     } catch (error) {
-      console.error(t("Error submitting test:"), error); //  t() जोड़ा गया
-      alert(t("Something went wrong while submitting test.")); //  t() जोड़ा गया
+      console.error(t("Error submitting test:"), error);
+      alert(t("Something went wrong while submitting test."));
     }
     navigate("/dashboard");
   };
 
   const currentQuestion = Questions[currentIndex];
-  console.log("jay ho", currentQuestion);
 
   return (
     <div
       className="test-wrapper bg-[#2a1e55] w-full min-h-screen p-4"
       ref={elementRef}
     >
-
       <TimerFunc onTimeUp={handleSubmit} />
       <div className="flex mb-5 gap-5 justify-center">
         <p className="page-tracker text-white p-3 rounded-3xl bg-violet-950 shadow-2xs shadow-black ">
-          {t("Tab Change")} :-{tabHiddenCount} 
+          {t("Tab Change")} :-{tabHiddenCount}
         </p>
         <p className="page-tracker text-white p-3 rounded-3xl bg-violet-950 shadow-2xs shadow-black ">
           {t("Exit Screen")}: {escapePressed ? t("yes") : t("no")}{" "}
-          
         </p>
       </div>
 
@@ -182,25 +177,80 @@ const Testpage = () => {
               {t("Loading questions...")}
             </p>
           ) : Questions.length > 0 && currentQuestion ? (
-            currentQuestion.QuestionType == "mcq" ? (
-              <MCQ
-                currentIndex={currentIndex}
-                currentQuestion={currentQuestion}
-                handlePrev={handlePrev}
-                handleSubmit={handleSubmit}
-                handleNext={handleNext}
-                selectedAnswers={selectedAnswers}
-                Questions={Questions}
-                AnswerSelect={AnswerSelect}
-              />
-            ) : currentQuestion.QuestionType == "moq" ? (
-              <MOQ />
-            ) : (
-              <STQ />
-            )
+            <>
+              {
+                <>
+                  <div className="question-box h-[100px] mb-4">
+                    <h3 className="text-2xl font-semibold text-white">
+                      {t("Question")} {currentIndex + 1}:{" "}
+                      {currentQuestion.Question}{" "}
+                    </h3>
+                  </div>
+                  {currentQuestion.QuestionType == "tco" ? (
+                    <MCQ
+                      currentIndex={currentIndex}
+                      currentQuestion={currentQuestion}
+                      handlePrev={handlePrev}
+                      handleSubmit={handleSubmit}
+                      handleNext={handleNext}
+                      selectedAnswers={selectedAnswers}
+                      Questions={Questions}
+                      AnswerSelect={AnswerSelect}
+                    />
+                  ) : currentQuestion.QuestionType == "mcq" ? (
+                    <MOQ
+                      currentIndex={currentIndex}
+                      currentQuestion={currentQuestion}
+                      handlePrev={handlePrev}
+                      handleSubmit={handleSubmit}
+                      handleNext={handleNext}
+                      selectMcq={selectMcq}
+                      Questions={Questions}
+                      AnswerSelect={AnswerSelect}
+                    />
+                  ) : (
+                    <STQ
+                      currentIndex={currentIndex}
+                      currentQuestion={currentQuestion}
+                      handlePrev={handlePrev}
+                      handleSubmit={handleSubmit}
+                      handleNext={handleNext}
+                      selectedAnswers={selectedAnswers}
+                      Questions={Questions}
+                      AnswerSelect={AnswerSelect}
+                    />
+                  )}
+                </>
+              }
+            </>
           ) : (
-            <p className="text-white text-center">{t("No questions found.")}</p> 
+            <p className="text-white text-center">{t("No questions found.")}</p>
           )}
+
+          <div className="buttons flex justify-between items-center">
+            <button
+              className="prev-btn font-bold text-white px-4 py-2 bg-[#443577] rounded disabled:opacity-50"
+              onClick={handlePrev}
+              disabled={currentIndex === 0}
+            >
+              {t("◀ Previous")}
+            </button>
+
+            <button
+              className="sub-btn font-bold px-4 py-2 bg-green-500 text-black rounded"
+              onClick={handleSubmit}
+            >
+              {t("Submit")}
+            </button>
+
+            <button
+              className="next-btn font-bold text-white px-4 py-2 bg-[#443577] rounded disabled:opacity-50"
+              onClick={handleNext}
+              disabled={currentIndex === Questions.length - 1}
+            >
+              {t("Next ▶")}
+            </button>
+          </div>
         </div>
       </div>
     </div>
