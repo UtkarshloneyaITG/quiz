@@ -8,27 +8,30 @@ const Que = require("../model/questionModel");
 // this function filter the answers and assign score to email
 async function setcorrect_answer(s_ans) {
   let score = 0;
-  let TypeTCO = s_ans.TypeTCO;
-  let TypeMCQ = s_ans.TypeMCQ;
-  const array_of_questions = questions;
-  const MCQ_que = array_of_questions.filter(
-    (value) => value.QuestionType == "mcq"
-  );
-  const TOC_que = array_of_questions.filter(
-    (value) => value.QuestionType == "tcq"
-  );
-  let answersTCO = TypeTCO.SubmitAnswers.filter((first_arr) =>
-    TOC_que.some(
-      (sec_arr) =>
-        first_arr.QuestionID == sec_arr.QuestionID &&
-        first_arr.AnswerID == sec_arr.CorrectAnswerID
+
+  let TypeTCO = s_ans.TypeTCO || { SubmitAnswers: [] };
+  let TypeMCQ = s_ans.TypeMCQ || { SubmitAnswers: [] };
+
+  const questions = await Que.find({}).lean();
+  const MCQ_que = questions.filter((q) => q.QuestionType === "mcq");
+  const TCO_que = questions.filter((q) => q.QuestionType === "tco");
+
+  //  For TCO type
+  const answersTCO = TypeTCO.SubmitAnswers.filter((submitted) =>
+    TCO_que.some(
+      (question) =>
+        submitted.QuestionID === question.QuestionID &&
+        submitted.AnswerID === question.CorrectAnswerID
     )
   );
+  //  For MCQ type
   const answersMCQ = TypeMCQ.SubmitAnswers.map((userQ) => {
     const question = MCQ_que.find((q) => q.QuestionID === userQ.QuestionID);
     if (!question) return null;
-    const correctAnswers = question.CorrectAnswerID;
-    const userAnswers = userQ.Answer;
+
+    const correctAnswers = question.CorrectAnswerID || [];
+    const userAnswers = userQ.Answer || [];
+
     let localScore = 0;
     userAnswers.forEach((ans) => {
       if (correctAnswers.includes(ans)) localScore += 0.5;
@@ -45,43 +48,43 @@ async function setcorrect_answer(s_ans) {
     };
   }).filter(Boolean);
 
-const simpleOBJ = answersMCQ.map((ele)=>{
-    return {
-        QuestionID : ele.QuestionID,
-        AnswerID : ele.correctAnswers
-    }
-})
+  const simpleOBJ = answersMCQ.map((ele) => ({
+    QuestionID: ele.QuestionID,
+    AnswerID: ele.correctAnswers,
+  }));
 
-  score = score < 0 ? 0 + answersTCO.length : score + answersTCO.length;
+  score = Math.max(0, score + answersTCO.length);
 
-  if (score < 0) score = 0;
-  const saveScore = await UserModel.updateOne(
+  await UserModel.updateOne(
     { email: s_ans.Email },
     {
       $push: {
         scoreHistory: {
           questionAttempt: {
             correctAnswers: answersTCO.length + simpleOBJ.length,
-            attempt: s_ans.SubmitAnswers.length,
+            attempt:
+              (TypeTCO.SubmitAnswers?.length || 0) +
+              (TypeMCQ.SubmitAnswers?.length || 0),
           },
-          score: score,
+          score,
           esc_count: s_ans.esc_count,
         },
       },
     }
   );
+
   return {
     Email: s_ans.Email,
     TypeTCO: {
       SubmitAnswers: TypeTCO.SubmitAnswers,
-      CorrectAnswer: answersTCO,
+      CorrectAnswers: answersTCO,
     },
     TypeMCQ: {
       SubmitAnswers: TypeMCQ.SubmitAnswers,
-      CorrectAnswer: simpleOBJ,
+      CorrectAnswers: simpleOBJ,
     },
     Score: score,
-    esc_count : s_ans.esc_count,
+    esc_count: s_ans.esc_count,
   };
 }
 const submitAnswers = async (req, res, next) => {
@@ -91,7 +94,9 @@ const submitAnswers = async (req, res, next) => {
     const s_ans = await ans_.save();
     res.status(200).json({
       message: "your answer submited successfully",
-      Submits: req.body.SubmitAnswers.length,
+      Submits:
+        req.body.TypeMCQ.SubmitAnswers.length +
+        req.body.TypeTCO.SubmitAnswers.length,
     });
   } catch (error) {
     next(error);
