@@ -10,9 +10,6 @@ async function setcorrect_answer(s_ans) {
   let score = 0;
   let TypeTCO = s_ans.TypeTCO;
   let TypeMCQ = s_ans.TypeMCQ;
-
-  const questions = await Que.find({}).lean();
-
   const array_of_questions = questions;
   const MCQ_que = array_of_questions.filter(
     (value) => value.QuestionType == "mcq"
@@ -26,12 +23,15 @@ async function setcorrect_answer(s_ans) {
         first_arr.QuestionID == sec_arr.QuestionID &&
         first_arr.AnswerID == sec_arr.CorrectAnswerID
     )
-  );
+  ); 
+  //  For MCQ type
   const answersMCQ = TypeMCQ.SubmitAnswers.map((userQ) => {
     const question = MCQ_que.find((q) => q.QuestionID === userQ.QuestionID);
     if (!question) return null;
-    const correctAnswers = question.CorrectAnswerID;
-    const userAnswers = userQ.Answer;
+
+    const correctAnswers = question.CorrectAnswerID || [];
+    const userAnswers = userQ.Answer || [];
+
     let localScore = 0;
     userAnswers.forEach((ans) => {
       if (correctAnswers.includes(ans)) localScore += 0.5;
@@ -48,40 +48,45 @@ async function setcorrect_answer(s_ans) {
     };
   }).filter(Boolean);
 
-  const simpleOBJ = answersMCQ.map((ele) => {
+const simpleOBJ = answersMCQ.map((ele)=>{
     return {
-      QuestionID: ele.QuestionID,
-      AnswerID: ele.correctAnswers,
-    };
-  });
+        QuestionID : ele.QuestionID,
+        AnswerID : ele.correctAnswers
+    }
+})
 
-  score = score < 0 ? 0 + answersTCO.length : score + answersTCO.length;
+  score = Math.max(0, score + answersTCO.length);
 
-  if (score < 0) score = 0;
-  const saveScore = await UserModel.updateOne(
+  await UserModel.updateOne(
     { email: s_ans.Email },
     {
       $push: {
         scoreHistory: {
           questionAttempt: {
             correctAnswers: answersTCO.length + simpleOBJ.length,
-            attempt: s_ans.SubmitAnswers.length,
+            attempt:
+              (TypeTCO.SubmitAnswers?.length || 0) +
+              (TypeMCQ.SubmitAnswers?.length || 0),
           },
-          score: score,
+          score,
           esc_count: s_ans.esc_count,
         },
       },
     }
   );
+
   return {
     Email: s_ans.Email,
     TypeTCO: {
       SubmitAnswers: TypeTCO.SubmitAnswers,
-      CorrectAnswer: answersTCO,
+      CorrectAnswers: answersTCO,
     },
     TypeMCQ: {
       SubmitAnswers: TypeMCQ.SubmitAnswers,
-      CorrectAnswer: simpleOBJ,
+      CorrectAnswers: simpleOBJ,
+    },
+    TypeSubjective : {
+      SubmitAnswers : TypeSubjective.SubmitAnswers
     },
     Score: score,
     esc_count: s_ans.esc_count,
@@ -94,7 +99,9 @@ const submitAnswers = async (req, res, next) => {
     const s_ans = await ans_.save();
     res.status(200).json({
       message: "your answer submited successfully",
-      Submits: req.body.SubmitAnswers.length,
+      Submits:
+        req.body.TypeMCQ.SubmitAnswers.length +
+        req.body.TypeTCO.SubmitAnswers.length,
     });
   } catch (error) {
     next(error);
