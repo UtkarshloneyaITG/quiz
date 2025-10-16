@@ -17,6 +17,8 @@ const Dashboard = () => {
     try {
       const user = JSON.parse(localStorage.getItem("user")) || {};
       const userData = await dashboard(user.email);
+
+      console.log("userdata", userData);
       setData(userData.userData);
       setScore(userData.userData.scoreHistory);
     } catch (error) {
@@ -141,6 +143,8 @@ const Dashboard = () => {
                 <p className="text-center">Score</p>
                 <p className="text-right pr-6">Details</p>
               </div>
+              {/* {score.map((s, index) => {
+                const dateObj = new Date(s.submitedON);
 
               {score.length === 0 ? (
                 <motion.p
@@ -158,40 +162,36 @@ const Dashboard = () => {
                   const time = dateObj.toLocaleTimeString();
                   const isOpen = openIndexes.includes(index);
 
-                  return (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.25, delay: index * 0.1 }}
-                      className="bg-white/20 border border-white/20 rounded-2xl text-white px-6 py-4 shadow-md cursor-pointer hover:bg-white/30 transition-colors select-none"
-                      onClick={() => toggleOpen(index)}
-                    >
-                      <div className="flex justify-between items-center">
-                        <span className="text-lg font-medium">Attempt {index + 1}</span>
-                        <span className="text-2xl font-bold tracking-wide">{s.score}</span>
-                        <span className="text-3xl select-none">•••</span>
-                      </div>
-
-                      <AnimatePresence>
-                        {isOpen && (
-                          <motion.div
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: "auto" }}
-                            exit={{ opacity: 0, height: 0 }}
-                            transition={{ duration: 0.3 }}
-                            className="mt-5 border-t border-white/30 pt-3 text-sm md:text-base space-y-1"
-                          >
-                            <p>✅ Correct Answers: {s.questionAttempt.correctAnswers}</p>
-                            <p>❓ Attempted Questions: {s.questionAttempt.attempt}</p>
-                            <p>🗓️ Submitted on: {date}, {time}</p>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </motion.div>
-                  );
-                })
-              )}
+                return (
+                  <div
+                    key={index}
+                    className={`heading font-bold text-2xl text-white pt-2 pb-2 pr-15 pl-10  m-2 rounded-2xl hover:bg-[#41317a] transition duration-300 score-holder ${
+                      isOpen ? "open" : ""
+                    }`}
+                  >
+                    <div className="flex justify-between">
+                      Scores : <span>{s.score}</span>
+                      <span
+                        className="detailScoreOpener"
+                        onClick={() => toggleOpen(index)}
+                      >
+                        •••
+                      </span>
+                    </div>
+                    <br />
+                    <div className="detail-page-score">
+                      Attempt Questions : {s.questionAttempt.attempt} <br />
+                      <hr />
+                      Correct Answers : {s.questionAttempt.correctAnswers}{" "}
+                      <br />
+                      <hr />
+                      Date and Time: {date} , {time}
+                      <hr />
+                    </div>
+                  </div>
+                );
+              })} */}
+              <div className="scores-content"></div>
             </div>
           </motion.div>
         )}

@@ -156,9 +156,12 @@ const subQuestion = async (req, res, next) => {
     }
 
     const newQuestion = new Que({
-      ...req.body,
+      Question: Question,
       QuestionID: questionID,
+      QuestionType: "subjective",
     });
+
+    console.log(newQuestion);
 
     const savedQuestion = await newQuestion.save();
 

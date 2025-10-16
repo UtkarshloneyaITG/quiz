@@ -30,7 +30,7 @@ function AdminMangeUser() {
                 type="text"
                 placeholder="Name"
                 value={user.fullName}
-                className="p-2 bg-zinc-800 text-white border border-gray-600 rounded"
+                className="p-2 bg-zinc-800 capitalize text-green-400 font-semibold outline-none border border-gray-600 rounded"
                 readOnly
               />
               <select

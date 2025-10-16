@@ -28,29 +28,6 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    scoreHistory: [
-      {
-        questionAttempt: {
-          correctAnswers: {
-            type: Number,
-            required: true,
-          },
-          attempt: {
-            type: Number,
-            required: true,
-          },
-        },
-        score: { type: Number, required: true },
-        submitedON: {
-          type: Date,
-          default: Date.now,
-        },
-        esc_count: {
-          type: Number,
-          required: true,
-        },
-      },
-    ],
 
     role: {
       type: String,
