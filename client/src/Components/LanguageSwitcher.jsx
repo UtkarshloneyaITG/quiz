@@ -6,7 +6,7 @@ function LanguageSwitcher() {
   const { t, i18n } = useTranslation();
   const [open, setOpne] = useState(false);
 
-  const changeLanguage = (lng) => {
+  const changeLanguage = (lng = "en") => {
     i18n.changeLanguage(lng);
   };
 
@@ -16,7 +16,7 @@ function LanguageSwitcher() {
         <MdLanguage className="text-2xl" />
       </button>
       {open && (
-        <div className="top-10 -left-10 absolute bg-white p-2 flex flex-col gap-2 rounded">
+        <div className="top-10 -left-10 z-[9999] absolute bg-white p-2 flex flex-col gap-2 rounded">
           <button
             className={`${
               i18n.language === "en" ? "bg-[#2a1e55]" : "bg-[#b669fa]"

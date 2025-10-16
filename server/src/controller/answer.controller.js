@@ -10,6 +10,9 @@ async function setcorrect_answer(s_ans) {
   let score = 0;
   let TypeTCO = s_ans.TypeTCO;
   let TypeMCQ = s_ans.TypeMCQ;
+
+  const questions = await Que.find({}).lean();
+
   const array_of_questions = questions;
   const MCQ_que = array_of_questions.filter(
     (value) => value.QuestionType == "mcq"
@@ -45,12 +48,12 @@ async function setcorrect_answer(s_ans) {
     };
   }).filter(Boolean);
 
-const simpleOBJ = answersMCQ.map((ele)=>{
+  const simpleOBJ = answersMCQ.map((ele) => {
     return {
-        QuestionID : ele.QuestionID,
-        AnswerID : ele.correctAnswers
-    }
-})
+      QuestionID: ele.QuestionID,
+      AnswerID: ele.correctAnswers,
+    };
+  });
 
   score = score < 0 ? 0 + answersTCO.length : score + answersTCO.length;
 
@@ -81,7 +84,7 @@ const simpleOBJ = answersMCQ.map((ele)=>{
       CorrectAnswer: simpleOBJ,
     },
     Score: score,
-    esc_count : s_ans.esc_count,
+    esc_count: s_ans.esc_count,
   };
 }
 const submitAnswers = async (req, res, next) => {
