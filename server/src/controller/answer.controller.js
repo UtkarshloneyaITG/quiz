@@ -11,7 +11,7 @@ async function setcorrect_answer(s_ans) {
 
   let TypeTCO = s_ans.TypeTCO || { SubmitAnswers: [] };
   let TypeMCQ = s_ans.TypeMCQ || { SubmitAnswers: [] };
-
+  let TypeSubjective = s_ans.TypeSubjective || {SubmitAnswers: [] }
   const questions = await Que.find({}).lean();
   const MCQ_que = questions.filter((q) => q.QuestionType === "mcq");
   const TCO_que = questions.filter((q) => q.QuestionType === "tco");
@@ -82,6 +82,9 @@ async function setcorrect_answer(s_ans) {
     TypeMCQ: {
       SubmitAnswers: TypeMCQ.SubmitAnswers,
       CorrectAnswers: simpleOBJ,
+    },
+    TypeSubjective : {
+      SubmitAnswers : TypeSubjective.SubmitAnswers
     },
     Score: score,
     esc_count: s_ans.esc_count,

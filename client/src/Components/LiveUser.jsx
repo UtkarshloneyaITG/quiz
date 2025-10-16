@@ -20,13 +20,13 @@ const LiveUser = () => {
       ws.close();
     };
   }, []);
-  let topWindow;
+  let topWindow = window.innerWidth - 100;
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       drag
-      dragConstraints={{ top: 7, left: 10, bottom: 10,right: }}
+      dragConstraints={{ top: 7, left: 10, bottom: 10,right: 1}}
       className="fixed bottom-3 left-2 py-2 px-3 rounded-3xl z-40 bg-violet-950 text-white liveUser-bar flex items-center gap-2"
     >
       <div class="relative flex h-3 w-3">
