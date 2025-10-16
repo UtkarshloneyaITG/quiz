@@ -4,6 +4,7 @@ const {
     getQuestionByID,
     postQuestion,
     deleteQuestion,
+    subQuestion,
 } = require("../controller/question.Controller");
 const submitAnswers = require("../controller/answer.controller");
 const routes = express.Router();
@@ -22,11 +23,15 @@ routes.route("/post/new-question").post(postQuestion);
 // routes.route("/edit-question").put(editQuestion);
 
 //POST delete by id
-routes.route("/delete-question").post(deleteQuestion)
+routes.route("/delete-question").post(deleteQuestion);
+
+// POST Subjective type questions
+routes.route("/post/subjectiveQuestion").post(subQuestion);
+
     //Default URL Error
 routes.route("/").get((req, res, next) => {
     res.status(200).json({ message: "please enter correct url" });
-});
+});    
 
 
 

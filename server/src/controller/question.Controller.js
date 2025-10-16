@@ -4,7 +4,7 @@
 
 const { default: mongoose } = require("mongoose");
 const Que = require("../model/questionModel");
-//const Attempt = require("../models/Attempt");
+const QuestionType = require("../model/QuestionType");
 
 const getAllQuestions = async (req, res, next) => {
   try {
@@ -114,9 +114,7 @@ const postQuestion = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-};
-// const editQuestion = async(req, res, next) => {
-//     try {
+}
 
 const deleteQuestion = async (req, res, next) => {
   try {
@@ -135,67 +133,53 @@ const deleteQuestion = async (req, res, next) => {
   }
 };
 
-// const questionAttempt = async (req, res, next) => {
-//     const { userId , QuestionID } = req.body;
 
-//     try {
-//         const attempts = await Attempt.find({ userId }).lean();
+const subQuestion = async (req, res, next) => {
+  try {
+    let questionsLength = await Que.countDocuments();
+    let questionID;
 
-//         const questionIds = attempts.map(a => a.questionId);
-//         const Quest = await Que.find({
-//             QuestID: QuestionID
-//         }).lean();
+    while (true) {
+      let check = "Q" + String(questionsLength + 1).padStart(3, "0");
+      const exists = await Que.findOne({ QuestionID: check });
+      if (!exists) {
+        questionID = check;
+        break;
+      }
+      questionsLength++;
+    }
 
-//         const questionMap = {};
+    const { Question } = req.body;
+    console.log("Incoming Question:", Question);
 
-//         Quest.forEach(q => {
-//             questionMap[q._id.toString()] = q;
-//         });
+    const duplicateQuest = await Que.findOne({ Question });
+    if (duplicateQuest) {
+      return res.status(409).json({ message: "Question already exists!" });
+    }
 
-//         // const mcq_single = [];
-//         // const mcq_multiple = [];
-//         // const subjective = [];
+    const newQuestion = new Que({
+      ...req.body,
+      QuestionID: questionID, 
+    });
 
-//         for (const attempt of attempts) {
-//             const q = questionMap[attempt.questionId];
+    const savedQuestion = await newQuestion.save();
 
-//             if (!q) continue;
+    return res.status(201).json({
+      message: "Question added successfully",
+      question: savedQuestion,
+    });
 
-//             let isCorrect = null;
+  } catch (error) {
+    console.error("Error in subQuestion:", error);
+    return res.status(500).json({ message: "Server Error", error: error.message });
+  }
+};
 
-//             if (q.type === 'mcq_single') {
-//                 isCorrect = attempt.answer === q.correctAnswer;
-//                 result.mcq_single.push({ ...attempt, isCorrect });
-//             }
-
-//             else if (q.type === 'mcq_multiple') {
-
-//                 const a1 = Array.isArray(attempt.answer) ? attempt.answer.sort() : [];
-//                 const a2 = Array.isArray(q.correctAnswer) ? q.correctAnswer.sort() : [];
-//                 isCorrect = JSON.stringify(a1) === JSON.stringify(a2);
-//                 result.mcq_multiple.push({ ...attempt, isCorrect });
-//             }
-
-//             else if (q.type === 'subjective') {
-
-//                 isCorrect = null;
-//                 result.subjective.push({ ...attempt, isCorrect });
-//             }
-//         }
-
-//         res.status(200).json({
-//             msg: "Answer submitted successfully !"
-//         });
-
-//     } catch (err) {
-//         next(err)
-//     }
-// }
 
 module.exports = {
   getAllQuestions,
   getQuestionByID,
   postQuestion,
   deleteQuestion,
-  // questionAttempt
+  subQuestion
 };

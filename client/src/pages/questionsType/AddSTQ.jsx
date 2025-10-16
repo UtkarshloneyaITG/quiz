@@ -2,7 +2,12 @@ import React from "react";
 
 function AddSTQ({ question, setQuestion }) {
   return (
-    <from>
+    <from 
+    onSubmit={(e) => {
+        e.preventDefault();
+        setQuestion("");
+      }}
+      >
       <label>Question:</label>
       <textarea
         value={question}
