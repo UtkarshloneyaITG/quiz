@@ -114,7 +114,7 @@ const postQuestion = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-}
+};
 
 const deleteQuestion = async (req, res, next) => {
   try {
@@ -133,7 +133,6 @@ const deleteQuestion = async (req, res, next) => {
   }
 };
 
-
 const subQuestion = async (req, res, next) => {
   try {
     let questionsLength = await Que.countDocuments();
@@ -150,7 +149,6 @@ const subQuestion = async (req, res, next) => {
     }
 
     const { Question } = req.body;
-    console.log("Incoming Question:", Question);
 
     const duplicateQuest = await Que.findOne({ Question });
     if (duplicateQuest) {
@@ -159,7 +157,7 @@ const subQuestion = async (req, res, next) => {
 
     const newQuestion = new Que({
       ...req.body,
-      QuestionID: questionID, 
+      QuestionID: questionID,
     });
 
     const savedQuestion = await newQuestion.save();
@@ -168,18 +166,15 @@ const subQuestion = async (req, res, next) => {
       message: "Question added successfully",
       question: savedQuestion,
     });
-
   } catch (error) {
-    console.error("Error in subQuestion:", error);
-    return res.status(500).json({ message: "Server Error", error: error.message });
+    next(error);
   }
 };
-
 
 module.exports = {
   getAllQuestions,
   getQuestionByID,
   postQuestion,
   deleteQuestion,
-  subQuestion
+  subQuestion,
 };
