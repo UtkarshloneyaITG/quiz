@@ -23,7 +23,7 @@ async function setcorrect_answer(s_ans) {
         submitted.QuestionID === question.QuestionID &&
         submitted.AnswerID === question.CorrectAnswerID
     )
-  );
+  ); 
   //  For MCQ type
   const answersMCQ = TypeMCQ.SubmitAnswers.map((userQ) => {
     const question = MCQ_que.find((q) => q.QuestionID === userQ.QuestionID);
