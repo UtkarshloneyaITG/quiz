@@ -107,9 +107,8 @@ export const AdminContextProvider = ({ children }) => {
     }
 
     const data = await deleteUserById(otherUserId);
-    showAlert("user Deletion Successfull", "#24fc03");
+    showAlert("User Deleted", "#006400");
     console.log(data.msg);
-    showAlert(data.msg, "#24fc03");
     fetchUsers();
   };
 

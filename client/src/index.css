@@ -112,7 +112,7 @@ body * {
 .navs::before {
   content: "";
   position: absolute;
-  bottom: 0;
+  bottom: 11px;
   height: 2px;
   width: 15px;
   background-color: rgb(194 122 255);
@@ -120,14 +120,14 @@ body * {
 }
 
 .navs::after {
-  content: "";
-  position: absolute;
-  bottom: -5px;
-  height: 2px;
-  left: 0;
-  width: 5px;
-  background-color: rgb(194 122 255);
-  transition: 0.5s;
+    content: "";
+    position: absolute;
+    bottom: 6px;
+    height: 2px;
+    left: 0;
+    width: 5px;
+    background-color: rgb(194 122 255);
+    transition: 0.5s;
 }
 
 .navs:hover::before,

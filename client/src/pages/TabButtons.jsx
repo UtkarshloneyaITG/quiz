@@ -7,7 +7,7 @@ export function TabButtons({ activeTab, setActiveTab, fetchAllQuestionForDelete 
         onClick={() => setActiveTab("add-question")}
         className={`px-4 py-2 rounded ${
           activeTab === "add-question" ? "bg-indigo-600" : "bg-gray-700"
-        } hover:bg-indigo-800 transition-colors duration-200 text-white`}
+        } hover:bg-indigo-800 transition-colors duration-200 text-white cursor-pointer`}
       >
         Add Question
       </button>
@@ -18,7 +18,7 @@ export function TabButtons({ activeTab, setActiveTab, fetchAllQuestionForDelete 
         }}
         className={`px-4 py-2 rounded ${
           activeTab === "all-questions" ? "bg-indigo-600" : "bg-gray-700"
-        } hover:bg-indigo-800 transition-colors duration-200 text-white`}
+        } hover:bg-indigo-800 transition-colors duration-200 text-white cursor-pointer`}
       >
         All Questions
       </button>
