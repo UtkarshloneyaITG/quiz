@@ -5,54 +5,43 @@ import { Link } from "react-router-dom";
 const SelectCard = () => {
   const { t } = useTranslation();
 
+  const cards = [
+    {
+      path: "/tournament",
+      title: t("📝 Tournament"),
+      image: "/images/tournament.png",
+    },
+    {
+      path: "/test",
+      title: t("📝 Practice Quiz"),
+      image: "/images/5690878.jpg",
+    },
+    {
+      path: "/dashboard",
+      title: t("📊 Dashboard"),
+      image: "/images/59254.jpg",
+    },
+  ];
+
   return (
-    <div className=" w-full -bottom-100 bg-gradient-to-b from-white via-violet-300 to-purple-400 pt-10 pb-10" id="cards">
+    <div className="absolute w-full -bottom-100 bg-gradient-to-b from-white via-violet-300 to-purple-400 pt-10 pb-10" id="cards">
       <div className="card-list flex gap-20 justify-center">
         <Link to="/tournament">
           <div className="card w-90 h-80 rounded-3xl relative">
             <div className="bg-image w-full h-full rounded-3xl">
               <img
-                className="rounded-3xl w-full h-full"
-                src="/images/tournament.png"
+                src={card.image}
+                alt={card.title}
+                className="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110"
               />
+              <div className="absolute bottom-0 left-0 right-0 bg-white/70 backdrop-blur-md p-5 rounded-b-3xl">
+                <h3 className="text-xl md:text-2xl font-extrabold text-purple-800 text-center">
+                  {card.title}
+                </h3>
+              </div>
             </div>
-            <div className="content bg-white rounded-3xl absolute w-full bottom-0">
-              <h3 className="text-black font-bold text-3xl text-center">
-                {t("📝 Tournament")}
-              </h3>
-            </div>
-          </div>
-        </Link>
-        <Link to="/test">
-          <div className="card w-90 h-80 rounded-3xl relative">
-            <div className="bg-image w-full h-full rounded-3xl">
-              <img
-                className="rounded-3xl w-full h-full"
-                src="/images/5690878.jpg"
-              />
-            </div>
-            <div className="content bg-white rounded-3xl absolute w-full bottom-0">
-              <h3 className="text-black font-bold text-3xl text-center">
-                {t("📝 Practise Quiz")}
-              </h3>
-            </div>
-          </div>
-        </Link>
-        <Link to={"/dashboard"}>
-          <div className="card w-90 h-80 rounded-3xl relative">
-            <div className="bg-image w-full h-80 ">
-              <img
-                className="rounded-3xl h-full w-full"
-                src="/images/59254.jpg"
-              />
-            </div>
-            <div className="content  bg-white rounded-3xl absolute w-full bottom-0">
-              <h3 className="text-black font-bold text-3xl text-center">
-                {t("📊 Dashboard")}
-              </h3>
-            </div>
-          </div>
-        </Link>
+          </Link>
+        ))}
       </div>
     </div>
   );
