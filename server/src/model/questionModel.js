@@ -16,13 +16,11 @@ const Question = mongoose.Schema({
       Answer: {
         type: String,
         Array,
-        required: true,
       },
     },
   ],
   CorrectAnswerID: {
     type: String,
-    required: true,
   },
 
   QuestionType: {
