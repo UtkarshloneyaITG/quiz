@@ -60,10 +60,10 @@ function AdminMangeUser() {
             <table className="min-w-full text-left text-sm font-medium text-white">
               <thead className="bg-purple-700 text-white">
                 <tr>
-                  <th className="px-6 py-3 text-center ">ID</th>
-                  <th className="px-6 py-3 text-center">Name</th>
-                  <th className="px-6 py-3 text-center">Role</th>
-                  <th className="px-6 py-3 text-center">View</th>
+                  <th className="px-6 py-3  ">ID</th>
+                  <th className="px-6 py-3 ">Name</th>
+                  <th className="px-6 py-3 ">Role</th>
+                  <th className="px-6 py-3 ">View</th>
                   <th className="px-6 py-3 text-center">Delete</th>
                 </tr>
               </thead>
