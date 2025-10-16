@@ -152,15 +152,14 @@ export const addSubjectiveQustion = async (question) => {
     const res = await axios.post(
       `${BASE_URL}/question/post/subjectiveQuestion`,
       {
-        Question: question,
+        Question: question
       }
     );
-
-    const data = res.data.msg;
+    const data = res.data;
 
     return data;
   } catch (error) {
-    console.log("axios error adding subjective question", err);
+    console.log("axios error in adding subjective question", err);
   }
 };
 

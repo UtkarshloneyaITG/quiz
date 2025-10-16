@@ -19,7 +19,7 @@ const Home = () => {
       <SelectCard />
       </>
    :    <div>
-      <Alert message={"Welcome NewBie"} color="#CE2029"/>
+      <Alert message={"Your Welcome Make An Account"} color="#CE2029"/>
       <Background/>
       <HeroText/>
       <SelectCard />
