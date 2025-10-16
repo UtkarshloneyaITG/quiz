@@ -4,7 +4,7 @@
 
 const { default: mongoose } = require("mongoose");
 const Que = require("../model/questionModel");
-//const Attempt = require("../models/Attempt");
+const QuestionType = require("../model/QuestionType");
 
 const getAllQuestions = async (req, res, next) => {
   try {
@@ -136,29 +136,44 @@ const deleteQuestion = async (req, res, next) => {
 
 const subQuestion = async (req, res, next) => {
   try {
+    let questionsLength = await Que.countDocuments();
+    let questionID;
+
+    while (true) {
+      let check = "Q" + String(questionsLength + 1).padStart(3, "0");
+      const exists = await Que.findOne({ QuestionID: check });
+      if (!exists) {
+        questionID = check;
+        break;
+      }
+      questionsLength++;
+    }
+
     const { Question } = req.body;
     console.log("Incoming Question:", Question);
 
     const duplicateQuest = await Que.findOne({ Question });
-    console.log("Duplicate check result:", duplicateQuest);
-
     if (duplicateQuest) {
       return res.status(409).json({ message: "Question already exists!" });
     }
 
-    const newQuestion = new Que(req.body); // <-- use entire body as question
+    const newQuestion = new Que({
+      ...req.body,
+      QuestionID: questionID, 
+    });
+
     const savedQuestion = await newQuestion.save();
 
     return res.status(201).json({
       message: "Question added successfully",
       question: savedQuestion,
     });
+
   } catch (error) {
     console.error("Error in subQuestion:", error);
     return res.status(500).json({ message: "Server Error", error: error.message });
   }
 };
-
 
 
 module.exports = {
