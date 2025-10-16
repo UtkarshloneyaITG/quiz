@@ -100,16 +100,16 @@ export const AdminContextProvider = ({ children }) => {
   }, [userType]);
 
   const handleUserDelete = async (otherUserId, adminId) => {
-    const { showAlert } = useAlert();
+    // const { showAlert } = useAlert();
     if (otherUserId == adminId) {
       showAlert("your are not deleted yourshelf", "#CE2029");
       return;
     }
 
     const data = await deleteUserById(otherUserId);
-    showAlert("user Deletion Successfull", "#CE2029");
+    showAlert("user Deletion Successfull", "#24fc03");
     console.log(data.msg);
-    showAlert(data.msg, "#E9D502");
+    showAlert(data.msg, "#24fc03");
     fetchUsers();
   };
 

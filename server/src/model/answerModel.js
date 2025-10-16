@@ -57,7 +57,24 @@ const answersschems = mongoose.Schema({
       },
     ],
   },
-
+  TypeSubjective: {
+    SubmitAnswers: [
+      {
+        QuestionID: {
+          type: String,
+          required: true,
+        },
+        Question: {
+          type: String,
+          required: true,
+        },
+        Answer: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
+  },
   Score: {
     type: Number,
   },

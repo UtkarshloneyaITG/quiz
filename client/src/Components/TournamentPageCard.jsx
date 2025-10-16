@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import TurnamentInfo from "./TurnamentInfo";
+import { motion } from "framer-motion";
 
 function TournamentPageCard({ title, type, date, time, tType }) {
   const [showInformation, setInformation] = useState(false);
@@ -24,7 +25,8 @@ function TournamentPageCard({ title, type, date, time, tType }) {
         />
       )}
 
-      <div
+      <motion.div
+        
         onClick={() => setInformation(true)}
         className="weekly-tournaments-page-card bg-gradient-to-r from-purple-500 to-purple-900 w-fit p-5 rounded-2xl relative shadow-[#0007] shadow-2xl border-2 border-purple-600"
       >
@@ -82,7 +84,7 @@ function TournamentPageCard({ title, type, date, time, tType }) {
         ) : (
           ""
         )}
-      </div>
+      </motion.div>
     </div>
   );
 }

@@ -10,6 +10,7 @@ const Home = () => {
       <Background/>
       <HeroText/>
       <SelectCard />
+
     </div>
   );
 };
