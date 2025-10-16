@@ -34,7 +34,7 @@ function AddSTQ({ question, setQuestion, example }) {
           type="submit"
           className="bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 text-white font-semibold px-6 py-3 rounded-full shadow-md hover:scale-105 transform transition-transform duration-300 cursor-pointer"
         onClick={()=>{
-          addSubjectiveQustion(question)
+          addSubjectiveQustion(question);
         }}
         >
           ✏️ Submit Question
