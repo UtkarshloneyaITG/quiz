@@ -1,19 +1,16 @@
-import React from "react";
-import { useState } from "react";
-import { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { dashboard, deleteByEmail } from "../servics/api";
-
 import { useTranslation } from "react-i18next";
 import Loading from "../sharedComponents/Loding";
 import { useMyFunctions } from "../provider/MyAuthProvider";
 import { MdDelete } from "react-icons/md";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Dashboard = () => {
   const [data, setData] = useState({});
   const [score, setScore] = useState([]);
   const [openIndexes, setOpenIndexes] = useState([]);
   const { loding, setLoding } = useMyFunctions();
-
   const { t } = useTranslation();
 
   const getDashboard = async () => {
@@ -23,7 +20,7 @@ const Dashboard = () => {
       setData(userData.userData);
       setScore(userData.userData.scoreHistory);
     } catch (error) {
-      console.log("Error fetching dashboard data:", error);
+      console.error("Error fetching dashboard data:", error);
     } finally {
       setLoding(false);
     }
@@ -32,109 +29,173 @@ const Dashboard = () => {
   useEffect(() => {
     getDashboard();
   }, []);
+
   const toggleOpen = (index) => {
     setOpenIndexes((prev) =>
-      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
+      prev.includes(index)
+        ? prev.filter((i) => i !== index)
+        : [...prev, index]
     );
   };
 
   const handleDeleteHistory = async () => {
     try {
-      const res = await deleteByEmail(data.email);
-      console.log(res);
+      await deleteByEmail(data.email);
+      setScore([]);
     } catch (error) {
-      console.log("Error deleting history:", error);
+      console.error("Error deleting history:", error);
     }
   };
 
+  // Fallback initials for avatar
+  const getInitials = (name) => {
+    if (!name) return "";
+    const names = name.split(" ");
+    return names.map((n) => n[0]).join("").toUpperCase();
+  };
+
+  // Motion variants
+  const containerVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+  };
+
+  const profileCardVariants = {
+    hidden: { opacity: 0, scale: 0.95 },
+    visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } },
+  };
+
+  const headingVariants = {
+    hidden: { opacity: 0, y: -30 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.7, delay: 0.1 } },
+  };
+
   return (
-    <div className="test-wrapper relative bg-[#2a1e55] w-full min-h-screen">
-      {loding ? (
-        <Loading />
-      ) : (
-        <div className="dashboard border-1 border-white min-h-screen rounded-3xl ">
-          <div className="box-heading">
-            <h2 className="text-4xl text-center font-bold text-white">
+    <div className="min-h-screen bg-gradient-to-br from-[#2a1e55] to-[#1f163d] px-6 py-12">
+      <AnimatePresence>
+        {loding ? (
+          <motion.div
+            key="loading"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <Loading />
+          </motion.div>
+        ) : (
+          <motion.div
+            key="dashboard"
+            className="max-w-6xl mx-auto bg-white/10 backdrop-blur-lg p-10 rounded-3xl shadow-2xl border border-white/20"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+          >
+            {/* Heading */}
+            <motion.h2
+              className="text-4xl font-extrabold text-white text-center mb-14 tracking-wide select-none"
+              variants={headingVariants}
+            >
               {t("📊 Dashboard")}
-            </h2>
-          </div>
-          <div className="dash-content">
-            <div className="person-details flex gap-20">
-              <div>
-                <div className="person-photo h-50 w-50 bg-zinc-500 rounded-3xl ">
+            </motion.h2>
+
+            {/* User Profile Card */}
+            <motion.div
+              className="flex flex-col md:flex-row items-center md:items-start gap-10 mb-16"
+              variants={profileCardVariants}
+              initial="hidden"
+              animate="visible"
+            >
+              <div className="w-40 h-40 rounded-3xl overflow-hidden border-4 border-white/30 shadow-lg flex items-center justify-center bg-white/10 text-4xl font-extrabold text-white/70 select-none">
+                {data.avatarUrl ? (
                   <img
-                    className="object-cover rounded-3xl w-full h-full"
-                    src="data:image/jpeg;base64,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"
-                    alt=""
+                    src={data.avatarUrl}
+                    alt="User Avatar"
+                    className="w-full h-full object-cover"
                   />
-                </div>
+                ) : (
+                  getInitials(data.fullName) || "U"
+                )}
               </div>
-              <div className="flex w-full justify-between">
-                <div className="details text-2xl font-semibold text-white flex flex-col gap-5 self-center">
-                  <div className="person-name">Name : {data.fullName}</div>
-                  <div className="person-email">Email : {data.email}</div>
-                  <div className="person-class">Class : {data.userClass}</div>
-                </div>
+              <div className="flex-1 text-white space-y-2 mt-5">
+                <h3 className="text-3xl font-semibold">{data.fullName || "Unknown User"}</h3>
+                <p className="text-lg opacity-80">Email: {data.email || "N/A"}</p>
+                <p className="text-lg opacity-80">Class: {data.userClass || "N/A"}</p>
+              </div>
+              <motion.button
+                onClick={handleDeleteHistory}
+                whileHover={{ scale: 1.05, boxShadow: "0 0 8px rgba(220, 38, 38, 0.8)" }}
+                whileTap={{ scale: 0.95 }}
+                className="flex items-center cursor-pointer gap-3 bg-red-600 hover:bg-red-700 rounded-xl px-6 py-3 shadow-lg text-white font-semibold text-lg"
+                title="Delete Score History"
+              >
+                <MdDelete className="text-3xl" />
+                Delete History
+              </motion.button>
+            </motion.div>
 
-                <div className="flex text-white gap-2 self-center text-2xl font-semibold">
-                  <p>Delete History</p>
-                  <button
-                    onClick={handleDeleteHistory}
-                    className="self-center hover:text-red-500 transition-all cursor-pointer"
-                  >
-                    <MdDelete className="text-3xl" />
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div className="scores">
-              <div className="heading grid grid-cols-3 font-bold text-2xl text-white">
-                <p className="pl-[50px]  text-left">Title</p>
+            {/* Score History */}
+            <div className="space-y-6">
+              <div className="grid grid-cols-3 font-semibold text-white text-xl border-b border-white/30 pb-3 tracking-wide">
+                <p className="text-left pl-6">Title</p>
                 <p className="text-center">Score</p>
-
-                <p className="pr-[50px] text-right">Detail</p>
+                <p className="text-right pr-6">Details</p>
               </div>
-              {score.map((s, index) => {
-                const dateObj = new Date(s.submitedON);
 
-                const date = dateObj.toLocaleDateString();
-                const time = dateObj.toLocaleTimeString();
-                const isOpen = openIndexes.includes(index);
+              {score.length === 0 ? (
+                <motion.p
+                  className="text-center text-white/60 mt-6 text-lg italic"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  No score history available.
+                </motion.p>
+              ) : (
+                score.map((s, index) => {
+                  const dateObj = new Date(s.submitedON);
+                  const date = dateObj.toLocaleDateString();
+                  const time = dateObj.toLocaleTimeString();
+                  const isOpen = openIndexes.includes(index);
 
-                return (
-                  <div
-                    key={index}
-                    className={`heading font-bold text-2xl text-white pt-2 pb-2 pr-15 pl-10  m-2 rounded-2xl hover:bg-[#41317a] transition duration-300 score-holder ${
-                      isOpen ? "open" : ""
-                    }`}
-                  >
-                    <div className="flex justify-between">
-                      Scores : <span>{s.score}</span>
-                      <span
-                        className="detailScoreOpener"
-                        onClick={() => toggleOpen(index)}
-                      >
-                        •••
-                      </span>
-                    </div>
-                    <br />
-                    <div className="detail-page-score">
-                      Attempt Questions : {s.questionAttempt.attempt} <br />
-                      <hr />
-                      Correct Answers : {s.questionAttempt.correctAnswers}{" "}
-                      <br />
-                      <hr />
-                      Date and Time: {date} , {time}
-                      <hr />
-                    </div>
-                  </div>
-                );
-              })}
-              <div className="scores-content"></div>
+                  return (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.25, delay: index * 0.1 }}
+                      className="bg-white/20 border border-white/20 rounded-2xl text-white px-6 py-4 shadow-md cursor-pointer hover:bg-white/30 transition-colors select-none"
+                      onClick={() => toggleOpen(index)}
+                    >
+                      <div className="flex justify-between items-center">
+                        <span className="text-lg font-medium">Attempt {index + 1}</span>
+                        <span className="text-2xl font-bold tracking-wide">{s.score}</span>
+                        <span className="text-3xl select-none">•••</span>
+                      </div>
+
+                      <AnimatePresence>
+                        {isOpen && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={{ opacity: 0, height: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="mt-5 border-t border-white/30 pt-3 text-sm md:text-base space-y-1"
+                          >
+                            <p>✅ Correct Answers: {s.questionAttempt.correctAnswers}</p>
+                            <p>❓ Attempted Questions: {s.questionAttempt.attempt}</p>
+                            <p>🗓️ Submitted on: {date}, {time}</p>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </motion.div>
+                  );
+                })
+              )}
             </div>
-          </div>
-        </div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

@@ -38,10 +38,10 @@ function AdminMangeUser() {
                 onChange={(e) => handleUserType(e.target.value)}
                 className="p-2 bg-zinc-800 text-white border border-gray-600 rounded"
               >
-                <option className="text-black" value="user">
+                <option className="text-white" value="user">
                   User
                 </option>
-                <option className="text-black" value="admin">
+                <option className="text-white" value="admin">
                   Admin
                 </option>
               </select>
