@@ -24,11 +24,18 @@ const SelectCard = () => {
   ];
 
   return (
-    <div className="absolute w-full -bottom-100 bg-gradient-to-b from-white via-violet-300 to-purple-400 pt-10 pb-10" id="cards">
-      <div className="card-list flex gap-20 justify-center">
-        <Link to="/tournament">
-          <div className="card w-90 h-80 rounded-3xl relative">
-            <div className="bg-image w-full h-full rounded-3xl">
+    <div
+      className="w-full min-h-full bg-gradient-to-b from-white via-violet-200 to-purple-400 pb-15 px-4 -mt-20"
+      id="cards"
+    >
+      <h2 className="text-4xl md:text-5xl font-bold text-center text-purple-800 mb-12">
+        Choose Your Adventure ✨
+      </h2>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 max-w-6xl mx-auto">
+        {cards.map((card, index) => (
+          <Link key={index} to={card.path}>
+            <div className="relative rounded-3xl overflow-hidden shadow-xl group transition-transform transform hover:scale-105 hover:shadow-2xl duration-500">
               <img
                 src={card.image}
                 alt={card.title}

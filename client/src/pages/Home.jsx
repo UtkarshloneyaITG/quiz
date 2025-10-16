@@ -10,11 +10,10 @@ import HeroText from "../Components/HeroText";
 const Home = () => {
   const User = JSON.parse(localStorage.getItem("user"));
   return (
-    <div >
-      <Background/>
-      <HeroText/>
+    <div>
+      <Background />
+      <HeroText />
       <SelectCard />
-
     </div>
   );
 };

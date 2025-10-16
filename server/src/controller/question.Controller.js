@@ -5,6 +5,7 @@
 const { default: mongoose } = require("mongoose");
 const Que = require("../model/questionModel");
 const QuestionType = require("../model/QuestionType");
+const Ans = require("../model/answerModel");
 
 const getAllQuestions = async (req, res, next) => {
   try {
@@ -171,10 +172,26 @@ const subQuestion = async (req, res, next) => {
   }
 };
 
+async function getuserhistory_(allquestions, Email) {
+  let userSubmitedAnswer = await Ans.find({ Email: Email });
+  console.log("==>", userSubmitedAnswer);
+  let result = await userSubmitedAnswer.Results;
+  console.log(result);
+  return result;
+}
+const getuserhistoryByEmail = async (req, res, next) => {
+  try {
+    const all_Question = await Que.find({});
+    console.log(all_Question);
+    let finalHistory = await getuserhistory_(all_Question);
+    res.json({ finalHistory });
+  } catch (error) {}
+};
 module.exports = {
   getAllQuestions,
   getQuestionByID,
   postQuestion,
   deleteQuestion,
   subQuestion,
+  getuserhistoryByEmail,
 };
