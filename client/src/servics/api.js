@@ -1,5 +1,5 @@
 import axios from "axios";
-const BASE_URL = "http://localhost:3000";
+const BASE_URL = "http://localhost:5000";
 
 export const singup = async (obj) => {
   try {
@@ -116,11 +116,11 @@ export const deleteQuestionById = async (QuestionID) => {
   }
 };
 
+//  get user by it's unique id 
+
 export const getUserDetailsById = async (_id) => {
   try {
-
     console.log("userId", _id)
-
     const res = await axios.post(
       `${BASE_URL}/api/auth/user/userById`,
       { userId : _id });
