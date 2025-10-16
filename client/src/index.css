@@ -321,3 +321,7 @@ body * {
 .other-tournament-side-bar-list li:hover::before {
   width: 100px;
 }
+
+.font-kids {
+  font-family: 'Comic Neue', cursive;
+}

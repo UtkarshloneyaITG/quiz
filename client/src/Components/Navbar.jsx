@@ -34,7 +34,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="header-wrapper w-full ">
+    <div className="header-wrapper w-full">
       <div className="page-width">
         <div className="header-grid flex justify-between">
           <div className="header-logo">

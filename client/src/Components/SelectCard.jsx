@@ -6,7 +6,7 @@ const SelectCard = () => {
   const { t } = useTranslation();
 
   return (
-    <div className="absolute w-full bottom-0">
+    <div className="absolute w-full -bottom-100 bg-gradient-to-b from-white via-violet-300 to-purple-400 pt-10 pb-10" id="cards">
       <div className="card-list flex gap-20 justify-center">
         <Link to="/tournament">
           <div className="card w-90 h-80 rounded-3xl relative">
