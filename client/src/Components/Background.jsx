@@ -2,7 +2,7 @@ import React from "react";
 
 const Background = () => {
   return (
-    <div className="w-full h-full overflow-hidden">
+    <div className="w-full h-full overflow-hidden relative">
       <video
         autoPlay
         muted

@@ -89,7 +89,7 @@ const HeroText = () => {
 
             {/* Animated Button */}
             <motion.div
-                className="mt-10 inline-block px-6 py-4 rounded-full font-extrabold bg-purple-400 text-white border border-white text-xl shadow-lg cursor-pointer hover:bg-transparent hover:text-black hover:border-black transition-all duration-300"
+                className="mt-5 inline-block px-6 py-4 rounded-full font-extrabold bg-purple-400 text-white border border-white text-xl shadow-lg cursor-pointer hover:bg-transparent hover:text-black hover:border-black transition-all duration-300"
                 animate={{
                     rotate: [0, -5, 5, -5, 0],
                     scale: [1, 1.05, 1],
