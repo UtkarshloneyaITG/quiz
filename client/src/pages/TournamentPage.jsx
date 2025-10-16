@@ -5,7 +5,7 @@ import TournamentHeroPage from "../Components/TournamentHeroPage";
 function TournamentPage() {
   return (
     <>
-      <div className="tournamentPage relative flex justify-between overflow-hidden h-[calc(100vh_-_100px)]">
+      <div className="tournamentPage relative flex justify-between overflow-hidden h-[100%]">
         <TournamentSideBar />
         <TournamentHeroPage />
       </div>
