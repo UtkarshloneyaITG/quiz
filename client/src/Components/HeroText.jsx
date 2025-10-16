@@ -46,9 +46,16 @@ const AnimatedFun = () => {
     const colors = ['text-pink-500', 'text-yellow-400', 'text-purple-500', 'text-blue-400'];
 
     return (
-        <div className="flex text-8xl font-kids leading-tight ml-3 absolute top-30 left-45">
+        <motion.div drag 
+        dragConstraints={{
+          top: -280,
+          right: 1000,
+          left: -280,
+          bottom: 200
+        }} 
+        className="flex text-8xl font-kids leading-tight ml-3 absolute top-30 left-45">
             {letters.map((char, i) => (
-                <motion.span
+                <motion.span 
                     key={i}
                     className={`inline-block ${colors[i]} mx-1`}
                     animate={{
@@ -56,6 +63,7 @@ const AnimatedFun = () => {
                         y: [0, -10, 10, 0],
                         scale: [1, 1.2, 1],
                     }}
+                    
                     transition={{
                         repeat: Infinity,
                         duration: 1.4 + i * 0.1,
@@ -65,7 +73,7 @@ const AnimatedFun = () => {
                     {char}
                 </motion.span>
             ))}
-        </div>
+        </motion.div>
     );
 };
 

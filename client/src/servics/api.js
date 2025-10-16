@@ -96,6 +96,8 @@ export const fetchAllQuestions = async () => {
   }
 };
 
+// delete question by id
+
 export const deleteQuestionById = async (QuestionID) => {
   try {
     const res = await axios.post(
@@ -128,6 +130,8 @@ export const getUserDetailsById = async (_id) => {
     console.error("Failed to delete question:", error);
 }
 };
+// delete history by email
+
 export const deleteByEmail = async (email) => {
   try {
     const res = await axios.post(`${BASE_URL}/api/user/deleteHistory`, {
@@ -138,5 +142,53 @@ export const deleteByEmail = async (email) => {
     return data;
   } catch (error) {
     console.error("Failed to delete question:", error);
+  }
+};
+
+// add subjective question
+
+export const addSubjectiveQustion = async (question) => {
+  try {
+    const res = await axios.post(
+      `${BASE_URL}/question/post/subjectiveQuestion`,
+      {
+        Question: question,
+      }
+    );
+
+    const data = res.data.msg;
+
+    return data;
+  } catch (error) {
+    console.log("axios error adding subjective question", err);
+  }
+};
+
+// delet a single history
+
+export const deleteSingleHistory = async (email, historyIndex) => {
+  try {
+    const res = axios.post(`${BASE_URL}/api/user/deleteSingleHistory`, {
+      email,
+      historyIndex,
+    });
+    const data = res.data;
+    return data;
+  } catch (error) {
+    console.log(`axios error by deleting single history`);
+  }
+};
+
+// delete user account by email
+
+export const deleteUserAccountByEmail = async (email) => {
+  try {
+    const res = axios.post(`${BASE_URL}/api/auth/user/delectAccByEmail`, {
+      email,
+    });
+    const data = res.data;
+    return data;
+  } catch (error) {
+    console.log(`axios error by deleting single history`);
   }
 };
