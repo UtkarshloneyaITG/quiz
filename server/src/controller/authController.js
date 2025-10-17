@@ -7,7 +7,7 @@ require("dotenv").config();
 const jwtToken = process.env.JWT_S;
 
 exports.registerUser = async (req, res) => {
-  const { fullName, email, phoneNumber, userClass, password , role} = req.body;
+  const { fullName, email, phoneNumber, userClass, password, role } = req.body;
 
   const userEamilAllreadyExixt = await User.findOne({ email });
   const userPhoneNumberAllreadyExixt = await User.findOne({ phoneNumber });
@@ -26,7 +26,7 @@ exports.registerUser = async (req, res) => {
     phoneNumber,
     userClass,
     password: hashPassword,
-    role
+    role,
   });
 
   const token = jwt.sign(
@@ -299,7 +299,7 @@ exports.FindUser = async (req, res, next) => {
 exports.getLeaderBord = async (req, res, next) => {
   try {
     let users = await User.find().sort(scoreHistory.length > 0);
-    
+
     // users = users.filter(user => user.scoreHistory.length > 0);
     console.log(users);
 
@@ -315,12 +315,11 @@ exports.getLeaderBord = async (req, res, next) => {
     // users = users.sort((a, b) => b.totalScore - a.totalScore);
 
     res.json(users);
-
   } catch (error) {
     console.log(error);
     next(error);
   }
-}
+};
 
 exports.getUserById = async (req, res, next) => {
   try {
@@ -339,19 +338,21 @@ exports.getUserById = async (req, res, next) => {
 
 exports.deleteAccByEamil = async (req, res, next) => {
   try {
-    const { email } = req.body;
+    const { email, password } = req.body;
 
     console.log(email);
 
-    const user = await User.deleteOne({ email });
+    const user = await User.findOne({ email });
 
-    console.log(user);
+    const invalidPassword = await bcrypt.compare(password, user.password);
 
-    if (!user) {
+    if (!invalidPassword) {
       return res.status(400).json({
-        msg: `user ${email} not found`,
+        msg: "invalid email or password",
       });
     }
+
+    await User.deleteOne({ email });
 
     res.status(200).json({
       msg: "your account deleted succsefully",

@@ -1,12 +1,14 @@
 const express = require("express");
 const {
-    getAllQuestions,
-    getQuestionByID,
-    postQuestion,
-    deleteQuestion,
-    subQuestion,
+  getAllQuestions,
+  getQuestionByID,
+  postQuestion,
+  deleteQuestion,
+  subQuestion,
+  getuserhistoryByEmail,
 } = require("../controller/question.Controller");
 const submitAnswers = require("../controller/answer.controller");
+const { Route } = require("react-router-dom");
 const routes = express.Router();
 
 // Get all Questions
@@ -28,13 +30,12 @@ routes.route("/delete-question").post(deleteQuestion);
 // POST Subjective type questions
 routes.route("/post/subjectiveQuestion").post(subQuestion);
 
-    //Default URL Error
+//Get SingleUserData
+routes.route("/getuserhistory").post(getuserhistoryByEmail)
+
+//Default URL Error
 routes.route("/").get((req, res, next) => {
-    res.status(200).json({ message: "please enter correct url" });
-});    
-
-
-
-
+  res.status(200).json({ message: "please enter correct url" });
+});
 
 module.exports = routes;

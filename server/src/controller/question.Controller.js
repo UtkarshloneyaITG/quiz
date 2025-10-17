@@ -5,6 +5,7 @@
 const { default: mongoose } = require("mongoose");
 const Que = require("../model/questionModel");
 const QuestionType = require("../model/QuestionType");
+const Ans = require("../model/answerModel");
 
 const getAllQuestions = async (req, res, next) => {
   try {
@@ -174,10 +175,128 @@ const subQuestion = async (req, res, next) => {
   }
 };
 
+async function getuserhistory_(Email) {
+  const allQuestions = await Que.find({}).lean();
+  const userSubmitedAnswer = await Ans.findOne({ Email });
+  if (!userSubmitedAnswer) return [];
+
+  const result = userSubmitedAnswer.Results || [];
+  const arrayOfHistory = [];
+
+  for (const element of result) {
+    // ===== 1️⃣ TCO =====
+    const TypeTCO = element.TypeTCO || { SubmitAnswers: [] };
+    const correctTCO = TypeTCO.SubmitAnswers.map((sub) => {
+      const question = allQuestions.find(
+        (q) => q.QuestionID === sub.QuestionID
+      );
+      if (!question) return null;
+
+      const correctIDs = Array.isArray(question.CorrectAnswerID)
+        ? question.CorrectAnswerID
+        : [question.CorrectAnswerID].filter(Boolean);
+
+      const correctText = (question.Answers || [])
+        .filter((a) => correctIDs.includes(a.AnswerID))
+        .map((a) => a.Answer);
+
+      const isCorrect = correctIDs.includes(sub.AnswerID);
+
+      return {
+        ...question,
+        UserAnswer: sub.AnswerID,
+        UserAnswerText: (question.Answers || [])
+          .filter((a) => a.AnswerID === sub.AnswerID)
+          .map((a) => a.Answer),
+        CorrectAnswerID: correctIDs,
+        CorrectAnswerText: correctText,
+        Status: isCorrect ? "Correct" : "Wrong",
+      };
+    }).filter(Boolean);
+
+    // ===== 2️⃣ MCQ =====
+    const TypeMCQ = element.TypeMCQ || { SubmitAnswers: [] };
+    const mcqResults = TypeMCQ.SubmitAnswers.map((sub) => {
+      const question = allQuestions.find(
+        (q) => q.QuestionID === sub.QuestionID
+      );
+      if (!question) return null;
+
+      const correctIDs = Array.isArray(question.CorrectAnswerID)
+        ? question.CorrectAnswerID
+        : [question.CorrectAnswerID].filter(Boolean);
+
+      const userAnswers = Array.isArray(sub.Answer)
+        ? sub.Answer
+        : [sub.Answer].filter(Boolean);
+
+      const CorrectAnswerText = (question.Answers || [])
+        .filter((a) => correctIDs.includes(a.AnswerID))
+        .map((a) => a.Answer);
+
+      const UserAnswerText = (question.Answers || [])
+        .filter((a) => userAnswers.includes(a.AnswerID))
+        .map((a) => a.Answer);
+
+      const isFullyCorrect =
+        correctIDs.length > 0 &&
+        correctIDs.every((id) => userAnswers.includes(id)) &&
+        userAnswers.length === correctIDs.length;
+
+      return {
+        ...question,
+        UserAnswer: userAnswers,
+        UserAnswerText,
+        CorrectAnswerID: correctIDs,
+        CorrectAnswerText,
+        Status: isFullyCorrect ? "Correct" : "Wrong",
+      };
+    }).filter(Boolean);
+
+    // ===== 3️⃣ Subjective =====
+    const TypeSubjective = element.TypeSubjective || { SubmitAnswers: [] };
+    const subjective = TypeSubjective.SubmitAnswers.map((sub) => {
+      const question = allQuestions.find(
+        (q) => q.QuestionID === sub.QuestionID
+      );
+      return {
+        ...question,
+        UserAnswer: sub.Answer,
+        Status: "Submitted",
+      };
+    });
+
+    arrayOfHistory.push({
+      SubmitedOn: element.Submited_on,
+      Score: element.Score,
+      esc_count: element.esc_count,
+      CorrectAnswers: correctTCO.concat(
+        mcqResults.filter((q) => q.Status === "Correct")
+      ),
+      WrongAnswers: mcqResults.filter((q) => q.Status === "Wrong"),
+      SubjectiveAnswers: subjective,
+    });
+  }
+
+  return arrayOfHistory;
+}
+const getuserhistoryByEmail = async (req, res, next) => {
+  try {
+    const all_Question = await Que.find({});
+    if (!req.body.Email)
+      return res.status(202).json({ meassage: "Email is required" });
+
+    let finalHistory = await getuserhistory_(req.body.Email);
+    res.json({ finalHistory });
+  } catch (error) {
+    next(error);
+  }
+};
 module.exports = {
   getAllQuestions,
   getQuestionByID,
   postQuestion,
   deleteQuestion,
   subQuestion,
+  getuserhistoryByEmail,
 };

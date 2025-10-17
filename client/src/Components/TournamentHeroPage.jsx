@@ -3,6 +3,7 @@ import TournamentPageHeader from "./TournamentPageHeader";
 import TournamentPageCard from "./TournamentPageCard";
 import TurnamentInfo from "./TurnamentInfo";
 import { motion, transform } from "framer-motion";
+import TournamentFooter from "./TournamentPageFooter";
 function TournamentHeroPage() {
   return (
     <>
@@ -19,7 +20,7 @@ function TournamentHeroPage() {
             <motion.div
               initial={{ opacity: 0, y: 100 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{duration:0.4}}
+              transition={{ duration: 0.4 }}
               className="pt-10 pb-10 p-20 grid grid-cols-3 text-white "
             >
               <TournamentPageCard
@@ -55,7 +56,9 @@ function TournamentHeroPage() {
             <motion.div
               initial={{ opacity: 0, y: 100 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{duration:0.4}} className="pt-10 pb-10 p-20 grid grid-cols-3 text-white ">
+              transition={{ duration: 0.4 }}
+              className="pt-10 pb-10 p-20 grid grid-cols-3 text-white "
+            >
               <TournamentPageCard
                 type="nt"
                 date="17/10/2025"
@@ -78,8 +81,15 @@ function TournamentHeroPage() {
                 tType="nt"
               />
             </motion.div>
-            <div className="Tournament-page-footer"></div>
           </div>
+          <motion.div
+            initial={{ y: 200, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.3 }}
+            className="Tournament-page-footer"
+          >
+            <TournamentFooter />
+          </motion.div>
         </div>
       </div>
     </>
