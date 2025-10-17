@@ -20,7 +20,7 @@ const LiveUser = () => {
       ws.close();
     };
   }, []);
-  let topWindow = window.innerHeight - 55;
+  let topWindow = window.innerHeight - 155;
   let rightWindow = window.innerWidth - 200;
   console.log(topWindow);
   return (
@@ -34,6 +34,7 @@ const LiveUser = () => {
         bottom: 1,
         right: rightWindow,
       }}
+
       className="fixed bottom-3 left-2 py-2 px-3 rounded-3xl z-100 bg-violet-950 text-white liveUser-bar flex items-center gap-2"
     >
       <div className="relative flex h-3 w-3">

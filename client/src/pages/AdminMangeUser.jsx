@@ -46,7 +46,7 @@ function AdminMangeUser() {
                 </option>
               </select>
               <Link
-                to={"/admin/dasbord/addentitys"}
+                to={`/signup?page=${userType}`}
                 onClick={handleAddUser}
                 className="bg-purple-600 px-4 py-2 rounded-md hover:bg-purple-800 transition-all text-white font-semibold"
               >

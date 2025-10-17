@@ -59,14 +59,14 @@ const App = () => {
                 </LazyLoad>
               }
             />
-            <Route
+            {/* <Route
               path="/admin/dasbord/addentitys"
               element={
                 <LazyLoad>
                   <SignUp mode="admin"/>
                 </LazyLoad>
               }
-            />
+            /> */}
             <Route
               path="/admin/dasbord/user-detail/:userId"
               element={

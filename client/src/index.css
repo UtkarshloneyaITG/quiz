@@ -5,7 +5,11 @@ html{
 }
 
 body::-webkit-scrollbar {
-    display: none;
+  display: none;
+}
+
+.details-box::-webkit-scrollbar{
+  display: none;
 }
 
 .page-width {
@@ -13,8 +17,7 @@ body::-webkit-scrollbar {
   margin: auto;
 }
 
-html *,
-body * {
+html {
   scroll-behavior: smooth;
 }
 
@@ -124,14 +127,14 @@ body * {
 }
 
 .navs::after {
-    content: "";
-    position: absolute;
-    bottom: 6px;
-    height: 2px;
-    left: 0;
-    width: 5px;
-    background-color: rgb(194 122 255);
-    transition: 0.5s;
+  content: "";
+  position: absolute;
+  bottom: 6px;
+  height: 2px;
+  left: 0;
+  width: 5px;
+  background-color: rgb(194 122 255);
+  transition: 0.5s;
 }
 
 .navs:hover::before,
@@ -144,7 +147,8 @@ body * {
 }
 
 .test-box,
-.dashboard,.leader-board  {
+.dashboard,
+.leader-board {
   padding: 25px 40px;
   border: 1px solid rgb(237, 192, 255);
   box-shadow: 0px 0px 13px 4px rgb(71, 32, 143);
@@ -327,5 +331,61 @@ body * {
 }
 
 .font-kids {
-  font-family: 'Comic Neue', cursive;
+  font-family: "Comic Neue", cursive;
+}
+
+/* Custom CSS for the jumping loader animation */
+.loader-animation::before {
+  content: "";
+  width: 48px;
+  height: 5px;
+  /* Tailwind-friendly color: light coral with 50% opacity */
+  background: #f0808050;
+  position: absolute;
+  top: 60px;
+  left: 0;
+  border-radius: 50%;
+  animation: shadow324 0.5s linear infinite;
+}
+
+.loader-animation::after {
+  content: "";
+  width: 100%;
+  height: 100%;
+  /* Tailwind-friendly color: light coral */
+  background: #6955b3;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 4px;
+  animation: jump7456 0.5s linear infinite;
+}
+
+@keyframes jump7456 {
+  15% {
+    border-bottom-right-radius: 3px;
+  }
+  25% {
+    transform: translateY(9px) rotate(22.5deg);
+  }
+  50% {
+    transform: translateY(18px) scale(1, 0.9) rotate(45deg);
+    border-bottom-right-radius: 40px;
+  }
+  75% {
+    transform: translateY(9px) rotate(67.5deg);
+  }
+  100% {
+    transform: translateY(0) rotate(90deg);
+  }
+}
+
+@keyframes shadow324 {
+  0%,
+  100% {
+    transform: scale(1, 1);
+  }
+  50% {
+    transform: scale(1.2, 1);
+  }
 }
