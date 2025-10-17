@@ -1,37 +1,62 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { MdLanguage } from "react-icons/md";
 
 function LanguageSwitcher() {
-  const { t, i18n } = useTranslation();
-  const [open, setOpne] = useState(false);
+  const { i18n } = useTranslation();
+  const [open, setOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
-  const changeLanguage = (lng = "en") => {
+  const toggleDropdown = () => setOpen((prev) => !prev);
+
+  const changeLanguage = (lng) => {
     i18n.changeLanguage(lng);
+    setOpen(false); // close dropdown on selection
   };
 
+  // Close dropdown when clicked outside
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   return (
-    <div className="relative flex gap-1  rounded">
-      <button onClick={() => setOpne(!open)}>
-        <MdLanguage className="text-2xl cursor-pointer hover:text-[#b669fa]" />
+    <div className="relative inline-block text-left" ref={dropdownRef}>
+      <button
+        onClick={toggleDropdown}
+        className="cursor-pointer flex items-center gap-2 px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-100 transition-all"
+        aria-haspopup="true"
+        aria-expanded={open}
+      >
+        <MdLanguage className="text-xl text-purple-600" />
+        <span className="hidden md:inline">Language</span>
       </button>
+
       {open && (
-        <div className="top-10 -left-10 z-[9999] absolute bg-white p-2 flex flex-col gap-2 rounded">
+        <div className="absolute right-0 mt-2 w-36 bg-white border border-gray-200 rounded-lg shadow-lg z-50 animate-fade-in-down">
           <button
-            className={`${
-              i18n.language === "en" ? "bg-[#2a1e55]" : "bg-[#b669fa]"
-            }   p-1 rounded`}
             onClick={() => changeLanguage("en")}
+            className={`w-full px-4 py-2 text-left text-sm rounded-t-md transition-colors duration-150 ${
+              i18n.language === "en"
+                ? "bg-purple-600 text-white cursor-not-allowed"
+                : "hover:bg-purple-600 text-black"
+            }`}
             disabled={i18n.language === "en"}
           >
             English
           </button>
-
           <button
-            className={`${
-              i18n.language === "hi" ? "bg-[#2a1e55]" : "bg-[#b669fa]"
-            }   p-1 rounded`}
             onClick={() => changeLanguage("hi")}
+            className={`w-full px-4 py-2 text-left text-sm rounded-b-md transition-colors duration-150 ${
+              i18n.language === "hi"
+                ? "bg-purple-600 text-white cursor-not-allowed"
+                : "hover:bg-purple-600 text-black"
+            }`}
             disabled={i18n.language === "hi"}
           >
             हिन्दी

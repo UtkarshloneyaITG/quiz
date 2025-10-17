@@ -7,7 +7,7 @@ require("dotenv").config();
 const jwtToken = process.env.JWT_S;
 
 exports.registerUser = async (req, res) => {
-  const { fullName, email, phoneNumber, userClass, password } = req.body;
+  const { fullName, email, phoneNumber, userClass, password , role} = req.body;
 
   const userEamilAllreadyExixt = await User.findOne({ email });
   const userPhoneNumberAllreadyExixt = await User.findOne({ phoneNumber });
@@ -26,6 +26,7 @@ exports.registerUser = async (req, res) => {
     phoneNumber,
     userClass,
     password: hashPassword,
+    role
   });
 
   const token = jwt.sign(
@@ -295,16 +296,31 @@ exports.FindUser = async (req, res, next) => {
   }
 };
 
-exports.getLeaderBord = async (req, res) => {
+exports.getLeaderBord = async (req, res, next) => {
   try {
-    let users = await Answers.find();
-    users = users.sort((a, b) => b.Score - a.Score);
+    let users = await User.find().sort(scoreHistory.length > 0);
+    
+    // users = users.filter(user => user.scoreHistory.length > 0);
+    console.log(users);
+
+    // for (let user of users) {
+    //   let total = 0;
+    //   for (let record of user.scoreHistory) {
+    //     total += record.score;
+    //   }
+    //   user.totalScore = total; // add totalScore property
+    // }
+
+    // // Sort descending by totalScore
+    // users = users.sort((a, b) => b.totalScore - a.totalScore);
 
     res.json(users);
+
   } catch (error) {
     console.log(error);
+    next(error);
   }
-};
+}
 
 exports.getUserById = async (req, res, next) => {
   try {

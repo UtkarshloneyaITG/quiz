@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { singup } from "../servics/api";
 import { useAlert } from "../servics/ApiChanger";
 import { useMyFunctions } from "../provider/MyAuthProvider";
 
 export default function SignUp() {
+  const [searchParams] = useSearchParams();
+  const page = searchParams.get("page");
+
+  console.log("page type" ,page);
+
   const { showAlert } = useAlert();
   const [data, setData] = useState({
     fullName: "",
@@ -12,6 +17,7 @@ export default function SignUp() {
     phoneNumber: "",
     password: "",
     userClass: "class",
+    role: page || "user",
   });
 
   const [errors, setErrors] = useState({
@@ -28,6 +34,9 @@ export default function SignUp() {
   useEffect(() => {
     const token = localStorage.getItem("token") || null;
 
+    if (page == "user" || page == "admin") {
+      return;
+    }
     if (token) {
       navigate("/");
       showAlert("HomePage", "#006400");
