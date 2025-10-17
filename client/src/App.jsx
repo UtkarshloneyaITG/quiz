@@ -17,7 +17,6 @@ import {
   Dashboard,
   Testpage,
   AdminDasbord,
-  AddPeople,
   UserDetail,
   TournamentPage,
   Leaderboard,
