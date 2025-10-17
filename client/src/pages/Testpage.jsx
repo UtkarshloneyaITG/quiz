@@ -7,6 +7,7 @@ import MCQ from "./questionsType/MCQ";
 import STQ from "./questionsType/STQ";
 import MOQ from "./questionsType/MOQ";
 import { useAlert } from "../servics/ApiChanger";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Testpage = () => {
   const { t } = useTranslation();
@@ -20,6 +21,8 @@ const Testpage = () => {
   const [tabHiddenCount, setTabHiddenCount] = useState(0);
   const [escapePressed, setEscapePressed] = useState(false);
 
+  const [direction, setDirection] = useState(0); // 1 for next, -1 for prev
+
   // 🟩 Separate states for all question types
   const [tcoAnswers, setTcoAnswers] = useState({});
   const [mcqAnswers, setMcqAnswers] = useState({});
@@ -27,7 +30,6 @@ const Testpage = () => {
 
   // -------------------- Effects ----------------------
   useEffect(() => {
-    // Track tab changes
     const handleVisibilityChange = () => {
       if (document.hidden) {
         setTabHiddenCount((prev) => prev + 1);
@@ -39,7 +41,6 @@ const Testpage = () => {
   }, []);
 
   useEffect(() => {
-    // Track ESC press
     const handleKeyDown = (event) => {
       if (event.key === "Escape" || event.keyCode === 27) {
         setEscapePressed(true);
@@ -78,11 +79,17 @@ const Testpage = () => {
   // -------------------- Handlers ----------------------
 
   const handleNext = () => {
-    setCurrentIndex((prev) => Math.min(prev + 1, Questions.length - 1));
+    if (currentIndex < Questions.length - 1) {
+      setDirection(1);
+      setCurrentIndex((prev) => prev + 1);
+    }
   };
 
   const handlePrev = () => {
-    setCurrentIndex((prev) => Math.max(prev - 1, 0));
+    if (currentIndex > 0) {
+      setDirection(-1);
+      setCurrentIndex((prev) => prev - 1);
+    }
   };
 
   //  For single correct (TCO)
@@ -121,21 +128,17 @@ const Testpage = () => {
     const userEmail = user?.email || "test@example.com";
 
     const TypeTCO = {
-      SubmitAnswers: Object.entries(tcoAnswers).map(
-        ([QuestionID, AnswerID]) => ({
-          QuestionID,
-          AnswerID,
-        })
-      ),
+      SubmitAnswers: Object.entries(tcoAnswers).map(([QuestionID, AnswerID]) => ({
+        QuestionID,
+        AnswerID,
+      })),
     };
 
     const TypeMCQ = {
-      SubmitAnswers: Object.entries(mcqAnswers).map(
-        ([QuestionID, AnswerID]) => ({
-          QuestionID,
-          AnswerID,
-        })
-      ),
+      SubmitAnswers: Object.entries(mcqAnswers).map(([QuestionID, AnswerID]) => ({
+        QuestionID,
+        AnswerID,
+      })),
     };
 
     const TypeSubjective = {
@@ -160,8 +163,6 @@ const Testpage = () => {
 
     try {
       await axios.post("http://localhost:5000/question/submit_answer", body);
-      // t("Test submitted successfully!");
-
       showAlert(`Test submitted successfully!`, "#14e32c");
       navigate("/dashboard");
     } catch (error) {
@@ -171,6 +172,24 @@ const Testpage = () => {
   };
 
   const currentQuestion = Questions[currentIndex];
+
+  // Animation variants for question sliding
+  const questionVariants = {
+    initial: (direction) => ({
+      opacity: 0,
+      x: direction > 0 ? 50 : -50,
+    }),
+    animate: {
+      opacity: 1,
+      x: 0,
+      transition: { duration: 0.5 },
+    },
+    exit: (direction) => ({
+      opacity: 0,
+      x: direction < 0 ? -50 : 50,
+      transition: { duration: 0.3 },
+    }),
+  };
 
   return (
     <div
@@ -193,63 +212,89 @@ const Testpage = () => {
           {t("Start Test")}
         </h2>
 
-        {loading ? (
-          <p className="text-white text-center">{t("Loading questions...")}</p>
-        ) : Questions.length > 0 && currentQuestion ? (
-          <>
-            <div className="mb-4">
-              <h3 className="text-2xl text-white font-semibold">
-                {t("Question")} {currentIndex + 1}: {currentQuestion.Question}
-              </h3>
-            </div>
+        <AnimatePresence mode="wait" initial={false}>
+          {loading ? (
+            <motion.p
+              key="loading"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="text-white text-center"
+            >
+              {t("Loading questions...")}
+            </motion.p>
+          ) : Questions.length > 0 && currentQuestion ? (
+            <motion.div
+              key={currentQuestion._id || currentIndex}
+              custom={direction}
+              variants={questionVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              className="question-content"
+            >
+              <div className="mb-4">
+                <h3 className="text-2xl text-white font-semibold">
+                  {t("Question")} {currentIndex + 1}: {currentQuestion.Question}
+                </h3>
+              </div>
 
-            {currentQuestion.QuestionType === "tco" ? (
-              <MCQ
-                currentQuestion={currentQuestion}
-                selectedAnswers={tcoAnswers}
-                AnswerSelect={handleTcoSelect}
-              />
-            ) : currentQuestion.QuestionType === "mcq" ? (
-              <MOQ
-                currentQuestion={currentQuestion}
-                mcqAnswers={mcqAnswers}
-                setmcqSelectedAnswers={handleMcqSelect}
-              />
-            ) : (
-              <STQ
-                currentQuestion={currentQuestion}
-                handleSubjectiveChange={handleSubjectiveChange}
-              />
-            )}
+              {currentQuestion.QuestionType === "tco" ? (
+                <MCQ
+                  currentQuestion={currentQuestion}
+                  selectedAnswers={tcoAnswers}
+                  AnswerSelect={handleTcoSelect}
+                />
+              ) : currentQuestion.QuestionType === "mcq" ? (
+                <MOQ
+                  currentQuestion={currentQuestion}
+                  mcqAnswers={mcqAnswers}
+                  setmcqSelectedAnswers={handleMcqSelect}
+                />
+              ) : (
+                <STQ
+                  currentQuestion={currentQuestion}
+                  handleSubjectiveChange={handleSubjectiveChange}
+                />
+              )}
+            </motion.div>
+          ) : (
+            <motion.p
+              key="no-questions"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="text-white text-center"
+            >
+              {t("No questions found.")}
+            </motion.p>
+          )}
+        </AnimatePresence>
 
-            <div className="buttons flex justify-between mt-4">
-              <button
-                onClick={handlePrev}
-                disabled={currentIndex === 0}
-                className="bg-[#443577] px-4 py-2 rounded text-white font-bold disabled:opacity-50"
-              >
-                ◀ {t("Previous")}
-              </button>
+        <div className="buttons flex justify-between mt-4">
+          <button
+            onClick={handlePrev}
+            disabled={currentIndex === 0}
+            className="bg-[#443577] px-4 py-2 rounded text-white font-bold disabled:opacity-50"
+          >
+            ◀ {t("Previous")}
+          </button>
 
-              <button
-                onClick={handleSubmit}
-                className="bg-green-500 px-4 py-2 rounded text-black font-bold"
-              >
-                {t("Submit")}
-              </button>
+          <button
+            onClick={handleSubmit}
+            className="bg-green-500 px-4 py-2 rounded text-black font-bold"
+          >
+            {t("Submit")}
+          </button>
 
-              <button
-                onClick={handleNext}
-                disabled={currentIndex === Questions.length - 1}
-                className="bg-[#443577] px-4 py-2 rounded text-white font-bold disabled:opacity-50"
-              >
-                {t("Next")} ▶
-              </button>
-            </div>
-          </>
-        ) : (
-          <p className="text-white text-center">{t("No questions found.")}</p>
-        )}
+          <button
+            onClick={handleNext}
+            disabled={currentIndex === Questions.length - 1}
+            className="bg-[#443577] px-4 py-2 rounded text-white font-bold disabled:opacity-50"
+          >
+            {t("Next")} ▶
+          </button>
+        </div>
       </div>
     </div>
   );

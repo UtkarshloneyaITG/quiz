@@ -13,7 +13,7 @@ function LanguageSwitcher() {
   return (
     <div className="relative flex gap-1  rounded">
       <button onClick={() => setOpne(!open)}>
-        <MdLanguage className="text-2xl" />
+        <MdLanguage className="text-2xl cursor-pointer hover:text-[#b669fa]" />
       </button>
       {open && (
         <div className="top-10 -left-10 z-[9999] absolute bg-white p-2 flex flex-col gap-2 rounded">

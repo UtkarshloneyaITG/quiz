@@ -27,7 +27,7 @@ async function setcorrect_answer(s_ans) {
   const answersMCQ = TypeMCQ.SubmitAnswers.map((userQ) => {
     const question = MCQ_que.find((q) => q.QuestionID === userQ.QuestionID);
     if (!question) return null;
-
+    
     const correctAnswers = question.CorrectAnswerID || [];
     const userAnswers = userQ.Answer || [];
     const userCorrectAnswer = [];
@@ -111,3 +111,4 @@ const submitAnswers = async (req, res, next) => {
 };
 
 module.exports = submitAnswers;
+

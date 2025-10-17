@@ -12,8 +12,6 @@ exports.deteleUserHistory = async (req, res, next) => {
       return res.status(400).json({ msg: "history was allready empty" });
     }
 
-    cons;
-
     const user = await User.updateOne(
       { email },
       { $set: { scoreHistory: [] } }

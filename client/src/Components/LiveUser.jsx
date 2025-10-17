@@ -40,7 +40,7 @@ const LiveUser = () => {
         <span class="absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75 animate-ping"></span>
         <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
       </div>
-      <h2>Live Users Online: {liveUsers}</h2>
+      <h2>Active Users : {liveUsers}</h2>
     </motion.div>
   );
 };

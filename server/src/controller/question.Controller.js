@@ -157,9 +157,12 @@ const subQuestion = async (req, res, next) => {
     }
 
     const newQuestion = new Que({
-      ...req.body,
+      Question: Question,
       QuestionID: questionID,
+      QuestionType: "subjective",
     });
+
+    console.log(newQuestion);
 
     const savedQuestion = await newQuestion.save();
 
@@ -172,20 +175,121 @@ const subQuestion = async (req, res, next) => {
   }
 };
 
-async function getuserhistory_(allquestions, Email) {
-  let userSubmitedAnswer = await Ans.find({ Email: Email });
-  console.log("==>", userSubmitedAnswer);
-  let result = await userSubmitedAnswer.Results;
-  console.log(result);
-  return result;
+async function getuserhistory_(Email) {
+  const allQuestions = await Que.find({});
+  const userSubmitedAnswer = await Ans.findOne({ Email });
+  if (!userSubmitedAnswer) return [];
+
+  const result = userSubmitedAnswer.Results || [];
+  const arrayOfHistory = [];
+
+  for (const element of result) {
+    // ============================
+    // 🔹 1️⃣ Handle TCO Questions
+    // ============================
+
+    const TCO_Correct = element.TypeTCO?.CorrectAnswers || [];
+    const TCO_Submit = element.TypeTCO?.SubmitAnswers || [];
+
+    // All Correct TCO (full question info)
+    const correctTCO = allQuestions
+      .filter((q) => q.QuestionType === "tco")
+      .filter((q) => TCO_Correct.some((c) => c.QuestionID === q.QuestionID))
+      .map((q) => ({
+        ...q.toObject(),
+        UserAnswer:
+          TCO_Submit.find((s) => s.QuestionID === q.QuestionID)?.AnswerID ||
+          null,
+        CorrectAnswerID: q.CorrectAnswerID,
+        Status: "Correct",
+      }));
+
+    // Wrong TCO (submitted but not in correct)
+    const wrongTCO = TCO_Submit.filter(
+      (sub) => !TCO_Correct.some((c) => c.QuestionID === sub.QuestionID)
+    )
+      .map((sub) => {
+        const question = allQuestions.find(
+          (q) => q.QuestionID === sub.QuestionID
+        );
+        return {
+          ...question?.toObject(),
+          UserAnswer: sub.AnswerID,
+          CorrectAnswerID: question?.CorrectAnswerID,
+          Status: "Wrong",
+        };
+      })
+      .filter(Boolean);
+
+    // ============================
+    // 🔹 2️⃣ Handle MCQ Questions
+    // ============================
+
+    const MCQ_Correct = element.TypeMCQ?.CorrectAnswers || [];
+    const MCQ_Submit = element.TypeMCQ?.SubmitAnswers || [];
+
+    const correctMCQ = MCQ_Submit.map((sub) => {
+      const q = allQuestions.find((q) => q.QuestionID === sub.QuestionID);
+      const correct = MCQ_Correct.find((c) => c.QuestionID === sub.QuestionID);
+      const correctIDs =  q.CorrectAnswerID || [];
+      console.log(correct)
+      const isFullyCorrect =
+        sub.Answer?.length &&
+        correctIDs.length &&
+        correctIDs.every((id) => sub.Answer.includes(id));
+
+      return {
+        ...q?.toObject(),
+        UserAnswer: sub.Answer,
+        CorrectAnswerID: correctIDs,
+        Status: isFullyCorrect ? "Correct" : "Wrong",
+      };
+    }).filter(Boolean);
+
+    const wrongMCQ = correctMCQ.filter((q) => q.Status === "Wrong");
+    const fullCorrectMCQ = correctMCQ.filter((q) => q.Status === "Correct");
+
+    // ============================
+    // 🔹 3️⃣ Subjective (if any)
+    // ============================
+
+    const Subj_Submit = element.TypeSubjective?.SubmitAnswers || [];
+    const subjective = Subj_Submit.map((sub) => {
+      const q = allQuestions.find((q) => q.QuestionID === sub.QuestionID);
+      return {
+        ...q?.toObject(),
+        UserAnswer: sub.Answer,
+        Status: "Submitted",
+      };
+    });
+
+    // ============================
+    // 🔹 4️⃣ Combine All
+    // ============================
+
+    arrayOfHistory.push({
+      SubmitedOn: element.Submited_on,
+      Score: element.Score,
+      esc_count: element.esc_count,
+      CorrectAnswers: [...correctTCO, ...fullCorrectMCQ],
+      WrongAnswers: [...wrongTCO, ...wrongMCQ],
+      SubjectiveAnswers: subjective,
+    });
+  }
+
+  return arrayOfHistory;
 }
 const getuserhistoryByEmail = async (req, res, next) => {
   try {
     const all_Question = await Que.find({});
-    console.log(all_Question);
-    let finalHistory = await getuserhistory_(all_Question);
+    if (!req.body.Email)
+      return res.status(202).json({ meassage: "Email is required" });
+
+    let finalHistory = await getuserhistory_(req.body.Email);
     res.json({ finalHistory });
-  } catch (error) {}
+  } catch (error) {
+    next(error);
+  }
 };
 module.exports = {
   getAllQuestions,
