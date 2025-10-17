@@ -22,8 +22,10 @@ function UserDetail() {
         const historyData = response.data;
         console.log(historyData)
 
-        user.scoreHistory = historyData.finalHistory || [];
+        console.log("user",user)
 
+        user.scoreHistory = historyData.finalHistory || [];
+      
         setCrrUser(user);
         setArrHistory(user.scoreHistory);
       } catch (error) {
@@ -43,19 +45,20 @@ function UserDetail() {
         {/* User Image */}
         <div className="flex-shrink-0">
           <img
-            src={"https://ui-avatars.com/api/?name=" + encodeURIComponent(crrUser.fullName)}
+            src={"https://ui-avatars.com/api/?name=" }
             alt={crrUser.fullName}
             className="w-48 h-48 rounded-full object-cover border-4 border-purple-600 shadow-lg"
           />
         </div>
 
         {/* User Info & Score History */}
-        <div className="flex-1 text-white overflow-y-auto">
+        <div className="flex-1 text-white overflow-y-auto mt-8">
           <div className="mb-10">
             <h1 className="text-4xl font-bold text-white mb-2">{crrUser.fullName}</h1>
             <p className="text-xl">
               <span className="text-purple-400 font-semibold">Email:</span> {crrUser.email}
             </p>
+            <p className="text-purple-400 text-xl font-semibold">Class:  <span className="text-white font-normal">{crrUser.userClass} </span></p>
           </div>
 
           <div>

@@ -12,6 +12,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@monaco-editor/react": "^4.7.0",
     "@tailwindcss/vite": "^4.1.14",
     "@vitejs/plugin-react": "^5.0.4",
     "axios": "^1.12.2",
@@ -32,6 +33,7 @@
     "react-i18next": "^16.0.0",
     "react-icons": "^5.5.0",
     "react-router-dom": "^7.9.3",
+    "react-split": "^2.0.14",
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.1"
   },
