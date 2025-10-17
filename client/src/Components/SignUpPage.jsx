@@ -8,7 +8,7 @@ export default function SignUp() {
   const [searchParams] = useSearchParams();
   const page = searchParams.get("page");
 
-  console.log("page type", page);
+  console.log("page type" ,page);
 
   const { showAlert } = useAlert();
   const [data, setData] = useState({
