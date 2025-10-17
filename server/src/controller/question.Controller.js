@@ -176,7 +176,7 @@ const subQuestion = async (req, res, next) => {
 };
 
 async function getuserhistory_(Email) {
-  const allQuestions = await Que.find({});
+  const allQuestions = await Que.find({}).lean();
   const userSubmitedAnswer = await Ans.findOne({ Email });
   if (!userSubmitedAnswer) return [];
 
@@ -184,95 +184,96 @@ async function getuserhistory_(Email) {
   const arrayOfHistory = [];
 
   for (const element of result) {
-    // ============================
-    // 🔹 1️⃣ Handle TCO Questions
-    // ============================
+    // ===== 1️⃣ TCO =====
+    const TypeTCO = element.TypeTCO || { SubmitAnswers: [] };
+    const correctTCO = TypeTCO.SubmitAnswers.map((sub) => {
+      const question = allQuestions.find(
+        (q) => q.QuestionID === sub.QuestionID
+      );
+      if (!question) return null;
 
-    const TCO_Correct = element.TypeTCO?.CorrectAnswers || [];
-    const TCO_Submit = element.TypeTCO?.SubmitAnswers || [];
+      const correctIDs = Array.isArray(question.CorrectAnswerID)
+        ? question.CorrectAnswerID
+        : [question.CorrectAnswerID].filter(Boolean);
 
-    // All Correct TCO (full question info)
-    const correctTCO = allQuestions
-      .filter((q) => q.QuestionType === "tco")
-      .filter((q) => TCO_Correct.some((c) => c.QuestionID === q.QuestionID))
-      .map((q) => ({
-        ...q.toObject(),
-        UserAnswer:
-          TCO_Submit.find((s) => s.QuestionID === q.QuestionID)?.AnswerID ||
-          null,
-        CorrectAnswerID: q.CorrectAnswerID,
-        Status: "Correct",
-      }));
+      const correctText = (question.Answers || [])
+        .filter((a) => correctIDs.includes(a.AnswerID))
+        .map((a) => a.Answer);
 
-    // Wrong TCO (submitted but not in correct)
-    const wrongTCO = TCO_Submit.filter(
-      (sub) => !TCO_Correct.some((c) => c.QuestionID === sub.QuestionID)
-    )
-      .map((sub) => {
-        const question = allQuestions.find(
-          (q) => q.QuestionID === sub.QuestionID
-        );
-        return {
-          ...question?.toObject(),
-          UserAnswer: sub.AnswerID,
-          CorrectAnswerID: question?.CorrectAnswerID,
-          Status: "Wrong",
-        };
-      })
-      .filter(Boolean);
-
-    // ============================
-    // 🔹 2️⃣ Handle MCQ Questions
-    // ============================
-
-    const MCQ_Correct = element.TypeMCQ?.CorrectAnswers || [];
-    const MCQ_Submit = element.TypeMCQ?.SubmitAnswers || [];
-
-    const correctMCQ = MCQ_Submit.map((sub) => {
-      const q = allQuestions.find((q) => q.QuestionID === sub.QuestionID);
-      const correct = MCQ_Correct.find((c) => c.QuestionID === sub.QuestionID);
-      const correctIDs =  q.CorrectAnswerID || [];
-      console.log(correct)
-      const isFullyCorrect =
-        sub.Answer?.length &&
-        correctIDs.length &&
-        correctIDs.every((id) => sub.Answer.includes(id));
+      const isCorrect = correctIDs.includes(sub.AnswerID);
 
       return {
-        ...q?.toObject(),
-        UserAnswer: sub.Answer,
+        ...question,
+        UserAnswer: sub.AnswerID,
+        UserAnswerText: (question.Answers || [])
+          .filter((a) => a.AnswerID === sub.AnswerID)
+          .map((a) => a.Answer),
         CorrectAnswerID: correctIDs,
+        CorrectAnswerText: correctText,
+        Status: isCorrect ? "Correct" : "Wrong",
+      };
+    }).filter(Boolean);
+
+    // ===== 2️⃣ MCQ =====
+    const TypeMCQ = element.TypeMCQ || { SubmitAnswers: [] };
+    const mcqResults = TypeMCQ.SubmitAnswers.map((sub) => {
+      const question = allQuestions.find(
+        (q) => q.QuestionID === sub.QuestionID
+      );
+      if (!question) return null;
+
+      const correctIDs = Array.isArray(question.CorrectAnswerID)
+        ? question.CorrectAnswerID
+        : [question.CorrectAnswerID].filter(Boolean);
+
+      const userAnswers = Array.isArray(sub.Answer)
+        ? sub.Answer
+        : [sub.Answer].filter(Boolean);
+
+      const CorrectAnswerText = (question.Answers || [])
+        .filter((a) => correctIDs.includes(a.AnswerID))
+        .map((a) => a.Answer);
+
+      const UserAnswerText = (question.Answers || [])
+        .filter((a) => userAnswers.includes(a.AnswerID))
+        .map((a) => a.Answer);
+
+      const isFullyCorrect =
+        correctIDs.length > 0 &&
+        correctIDs.every((id) => userAnswers.includes(id)) &&
+        userAnswers.length === correctIDs.length;
+
+      return {
+        ...question,
+        UserAnswer: userAnswers,
+        UserAnswerText,
+        CorrectAnswerID: correctIDs,
+        CorrectAnswerText,
         Status: isFullyCorrect ? "Correct" : "Wrong",
       };
     }).filter(Boolean);
 
-    const wrongMCQ = correctMCQ.filter((q) => q.Status === "Wrong");
-    const fullCorrectMCQ = correctMCQ.filter((q) => q.Status === "Correct");
-
-    // ============================
-    // 🔹 3️⃣ Subjective (if any)
-    // ============================
-
-    const Subj_Submit = element.TypeSubjective?.SubmitAnswers || [];
-    const subjective = Subj_Submit.map((sub) => {
-      const q = allQuestions.find((q) => q.QuestionID === sub.QuestionID);
+    // ===== 3️⃣ Subjective =====
+    const TypeSubjective = element.TypeSubjective || { SubmitAnswers: [] };
+    const subjective = TypeSubjective.SubmitAnswers.map((sub) => {
+      const question = allQuestions.find(
+        (q) => q.QuestionID === sub.QuestionID
+      );
       return {
-        ...q?.toObject(),
+        ...question,
         UserAnswer: sub.Answer,
         Status: "Submitted",
       };
     });
 
-    // ============================
-    // 🔹 4️⃣ Combine All
-    // ============================
-
     arrayOfHistory.push({
       SubmitedOn: element.Submited_on,
       Score: element.Score,
       esc_count: element.esc_count,
-      CorrectAnswers: [...correctTCO, ...fullCorrectMCQ],
-      WrongAnswers: [...wrongTCO, ...wrongMCQ],
+      CorrectAnswers: correctTCO.concat(
+        mcqResults.filter((q) => q.Status === "Correct")
+      ),
+      WrongAnswers: mcqResults.filter((q) => q.Status === "Wrong"),
       SubjectiveAnswers: subjective,
     });
   }
