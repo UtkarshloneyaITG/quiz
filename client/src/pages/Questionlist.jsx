@@ -14,11 +14,57 @@ export function QuestionsList({ questions, delete_question }) {
       setShowPopup(false);
     }, 2000);
   };
+
+  const [questionType, setQuestionType] = useState("All");
+
+  const buttons = [
+    { btn: "All Questions", type: "All" },
+    { btn: "Subjative Questions", type: "subjective" },
+    { btn: "MCQ Questions", type: "mcq" },
+    { btn: "TCQ Questions", type: "tco" },
+  ];
+
+  // const handleFilterQuestion = (type) => {
+  //   console.log("type", type);
+
+  //   setQuestionType(type);
+
+  //   console.log(questionType);
+
+  //   console.log(filterQuestion);
+  // };
+
+  const filterQuestion = questions.filter((v) => {
+    if (questionType == "All") {
+      return true;
+    } else if (v.QuestionType == questionType) {
+      return true;
+    }
+
+    return false;
+  });
+
   return (
     <div className="mt-6">
       <h3 className="text-xl font-semibold mb-2">All Questions</h3>
+      <div className="flex gap-2 m-2">
+        {buttons.map((v, i) => {
+          return (
+            <button
+              onClick={() => setQuestionType(v.type)}
+              className={`${
+                v.type == questionType ? "bg-green-500" : "bg-indigo-500"
+              }  px-2 py-1 rounded cursor-pointer transition-all ease-in`}
+              key={v.btn}
+            >
+              {v.btn}
+            </button>
+          );
+        })}
+      </div>
+
       <ul>
-        {questions.map((q) => (
+        {filterQuestion.map((q) => (
           <li
             key={q.QuestionID}
             className="bg-gray-800 p-4 mb-3 rounded-lg shadow hover:shadow-lg transition-shadow duration-300"

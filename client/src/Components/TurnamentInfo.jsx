@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-
+import { IoCloseCircle } from "react-icons/io5";
 function TurnamentInfo({ title, tType, date, time, handleClose }) {
   return (
     <div
@@ -9,7 +9,13 @@ function TurnamentInfo({ title, tType, date, time, handleClose }) {
               w-full h-full bg-red-500/10 backdrop-blur-md border border-white/20 
                rounded-2xl shadow-2xl flex flex-row justify-center  p-4 z-[999] "
     >
-      <div className="flex flex-row gap-4 w-[70%] h-[100%]">
+      <button className="absolute text-2xl text-black cursor-pointer hover:text-red-500 right-10 top-5">
+        <IoCloseCircle />
+      </button>
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="flex flex-row gap-4 w-[70%] h-[50%]"
+      >
         <div className="flex-[0.6] bg-gradient-to-br from-[#2a0845] to-[#6441a5] rounded-xl p-4 shadow-inner flex flex-col justify-between">
           <div>
             <h2 className="text-xl md:text-2xl font-bold text-center mb-2 md:mb-4">
