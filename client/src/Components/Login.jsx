@@ -145,7 +145,7 @@ const {showAlert}= useAlert();
           Log In
         </button>
 
-        <Link to="/signup" className="text-center">
+        <Link to="/signup/dummydata/dummydata" className="text-center">
           Don't have an account?{" "}
           <span className="text-red-500 capitalize font-bold">Signup</span>
         </Link>
