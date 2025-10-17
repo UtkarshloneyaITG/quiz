@@ -105,6 +105,7 @@ const CodeEditor = () => {
             placeholder="Project name"
             className="bg-zinc-800 text-white px-3 py-2 border border-purple-400 rounded focus:outline-none w-full md:w-auto"
           />
+          <p className='text-3xl text-white ml-10 font-semibold'>Gecko Editor</p>
           <div className="flex flex-wrap gap-3">
             <select
               value={language}
