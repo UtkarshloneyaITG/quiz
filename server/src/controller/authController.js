@@ -7,7 +7,7 @@ require("dotenv").config();
 const jwtToken = process.env.JWT_S;
 
 exports.registerUser = async (req, res) => {
-  const { fullName, email, phoneNumber, userClass, password } = req.body;
+  const { fullName, email, phoneNumber, userClass, password , role} = req.body;
 
   const userEamilAllreadyExixt = await User.findOne({ email });
   const userPhoneNumberAllreadyExixt = await User.findOne({ phoneNumber });
@@ -26,6 +26,7 @@ exports.registerUser = async (req, res) => {
     phoneNumber,
     userClass,
     password: hashPassword,
+    role
   });
 
   const token = jwt.sign(
