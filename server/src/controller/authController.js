@@ -296,16 +296,31 @@ exports.FindUser = async (req, res, next) => {
   }
 };
 
-exports.getLeaderBord = async (req, res) => {
+exports.getLeaderBord = async (req, res, next) => {
   try {
-    let users = await Answers.find();
-    users = users.sort((a, b) => b.Score - a.Score);
+    let users = await User.find();
+    
+    users = users.filter(user => user.scoreHistory.length > 0);
+    console.log(users);
+
+    for (let user of users) {
+      let total = 0;
+      for (let record of user.scoreHistory) {
+        total += record.score;
+      }
+      user.totalScore = total; // add totalScore property
+    }
+
+    // Sort descending by totalScore
+    users = users.sort((a, b) => b.totalScore - a.totalScore);
 
     res.json(users);
+
   } catch (error) {
     console.log(error);
+    next(error);
   }
-};
+}
 
 exports.getUserById = async (req, res, next) => {
   try {
