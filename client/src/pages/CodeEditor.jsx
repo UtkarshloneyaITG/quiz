@@ -94,8 +94,8 @@ const CodeEditor = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-zinc-900">
-      <div className="bg-zinc-900 p-4 shadow-lg w-full h-screen flex flex-col">
+    <div className="h-full bg-gradient-to-br from-purple-900 via-purple-800 to-zinc-900">
+      <div className="bg-zinc-900 p-4 shadow-lg w-full fixed h-full flex flex-col">
         {/* Controls */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
           <input
@@ -151,7 +151,7 @@ const CodeEditor = () => {
           }}
         >
           {/* Editor Panel */}
-          <div style={{ height: '100%', overflow: 'hidden'}}>
+          <div style={{ height: '86%', overflow: 'hidden'}}>
             <Editor
               height="100%"
               language={language}
@@ -168,7 +168,7 @@ const CodeEditor = () => {
           </div>
 
           {/* Preview Panel */}
-          <div className="bg-white rounded shadow overflow-hidden" style={{ height: '100%' }}>
+          <div className="bg-white rounded shadow overflow-hidden" style={{ height: '86%' }}>
             {isPreviewable ? (
               <iframe
                 title="Live Preview"
