@@ -24,7 +24,7 @@ import {
 } from "./pages";
 
 const App = () => {
-  return (
+  return (  
     <AdminContextProvider>
       <MyContextProvider>
         <Navbar />
@@ -66,7 +66,7 @@ const App = () => {
                   <SignUp mode="admin"/>
                 </LazyLoad>
               }
-            /> */}
+            /> */} 
             <Route
               path="/admin/dasbord/user-detail/:userId"
               element={

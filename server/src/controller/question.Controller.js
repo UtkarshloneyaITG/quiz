@@ -42,19 +42,7 @@ const getQuestionByID = async (req, res, next) => {
   }
 };
 
-// @desc post question
-//@route POST /post/new-question
-//@req Body
-// {
-// Question : "Whate is example ?",
-// Answers : [
-//   {Answer : "example 1"},
-//   {Answer : "example 2"},
-//   {Answer : "example 3"},
-//   {Answer : "example 4"}
-// ],
-// CorrectAnswerID : "0-3"
-// }
+
 async function postQuestionProcess(que) {
   let questionsLength = await Que.countDocuments();
 
@@ -184,7 +172,7 @@ async function getuserhistory_(Email) {
   const arrayOfHistory = [];
 
   for (const element of result) {
-    // ===== 1️⃣ TCO =====
+    
     const TypeTCO = element.TypeTCO || { SubmitAnswers: [] };
     const correctTCO = TypeTCO.SubmitAnswers.map((sub) => {
       const question = allQuestions.find(
@@ -214,7 +202,7 @@ async function getuserhistory_(Email) {
       };
     }).filter(Boolean);
 
-    // ===== 2️⃣ MCQ =====
+   
     const TypeMCQ = element.TypeMCQ || { SubmitAnswers: [] };
     const mcqResults = TypeMCQ.SubmitAnswers.map((sub) => {
       const question = allQuestions.find(
@@ -253,7 +241,7 @@ async function getuserhistory_(Email) {
       };
     }).filter(Boolean);
 
-    // ===== 3️⃣ Subjective =====
+
     const TypeSubjective = element.TypeSubjective || { SubmitAnswers: [] };
     const subjective = TypeSubjective.SubmitAnswers.map((sub) => {
       const question = allQuestions.find(

@@ -102,7 +102,7 @@ export const AdminContextProvider = ({ children }) => {
   const handleUserDelete = async (otherUserId, adminId) => {
     // const { showAlert } = useAlert();
     if (otherUserId == adminId) {
-      showAlert("your are not deleted yourshelf", "#CE2029");
+      showAlert("your can not delete yourshelf", "#CE2029");
       return;
     }
 

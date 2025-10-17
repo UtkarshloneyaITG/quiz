@@ -16,21 +16,21 @@ async function setcorrect_answer(s_ans) {
   const MCQ_que = questions.filter((q) => q.QuestionType === "mcq");
   const TCO_que = questions.filter((q) => q.QuestionType === "tco");
 
-  // ===== TCO =====
+
   const answersTCO = TypeTCO.SubmitAnswers.filter((submitted) => {
     const question = TCO_que.find((q) => q.QuestionID === submitted.QuestionID);
     if (!question) return false;
-    // Normalize CorrectAnswerID as array
+
     const correctIDs = Array.isArray(question.CorrectAnswerID)
       ? question.CorrectAnswerID
       : [question.CorrectAnswerID].filter(Boolean);
 
     const isCorrect = correctIDs.includes(submitted.AnswerID);
-    if (isCorrect) score += 1; // 1 point per correct TCO
+    if (isCorrect) score += 1;
     return isCorrect;
   });
 
-  // ===== MCQ =====
+
   const answersMCQ = TypeMCQ.SubmitAnswers.map((userQ) => {
     const question = MCQ_que.find((q) => q.QuestionID === userQ.QuestionID);
     if (!question) return null;
@@ -48,9 +48,9 @@ async function setcorrect_answer(s_ans) {
     userAnswers.forEach((ans) => {
       if (correctIDs.includes(ans)) {
         userCorrectAnswer.push(ans);
-        localScore += 0.5; // correct +0.5
+        localScore += 0.5; 
       } else {
-        localScore -= 0.5; // wrong -0.5
+        localScore -= 0.5;
       }
     });
 
@@ -73,7 +73,7 @@ async function setcorrect_answer(s_ans) {
     Answer: ele.userCorrectAnswer,
   }));
 
-  // Ensure score is not negative
+
   score = Math.max(0, score);
 
   return {
