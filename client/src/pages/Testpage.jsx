@@ -128,17 +128,21 @@ const Testpage = () => {
     const userEmail = user?.email || "test@example.com";
 
     const TypeTCO = {
-      SubmitAnswers: Object.entries(tcoAnswers).map(([QuestionID, AnswerID]) => ({
-        QuestionID,
-        AnswerID,
-      })),
+      SubmitAnswers: Object.entries(tcoAnswers).map(
+        ([QuestionID, AnswerID]) => ({
+          QuestionID,
+          AnswerID,
+        })
+      ),
     };
 
     const TypeMCQ = {
-      SubmitAnswers: Object.entries(mcqAnswers).map(([QuestionID, AnswerID]) => ({
-        QuestionID,
-        AnswerID,
-      })),
+      SubmitAnswers: Object.entries(mcqAnswers).map(
+        ([QuestionID, AnswerID]) => ({
+          QuestionID,
+          AnswerID,
+        })
+      ),
     };
 
     const TypeSubjective = {
@@ -233,7 +237,7 @@ const Testpage = () => {
               exit="exit"
               className="question-content"
             >
-              <div className="mb-4">
+              <div className="mb-4  h-[100px]">
                 <h3 className="text-2xl text-white font-semibold">
                   {t("Question")} {currentIndex + 1}: {currentQuestion.Question}
                 </h3>
