@@ -1,12 +1,12 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React from "react";
+import { motion } from "framer-motion";
 
 // One-time fly-in for regular letters
 const FlyInText = ({ text }) => {
   return (
     <div className="flex flex-wrap text-8xl font-kids leading-tight text-black">
-      {text.split('').map((char, index) => {
-        if (char === ' ') return <span key={index} className="w-2 md:w-4" />;
+      {text.split("").map((char, index) => {
+        if (char === " ") return <span key={index} className="w-2 md:w-4" />;
 
         return (
           <motion.span
@@ -25,7 +25,7 @@ const FlyInText = ({ text }) => {
               opacity: 1,
             }}
             transition={{
-              type: 'spring',
+              type: "spring",
               stiffness: 180,
               damping: 16,
               delay: index * 0.07,
@@ -41,8 +41,13 @@ const FlyInText = ({ text }) => {
 
 // Looping animated "fun!"
 const AnimatedFun = () => {
-  const letters = ['f', 'u', 'n', '!'];
-  const colors = ['text-pink-500', 'text-yellow-400', 'text-purple-500', 'text-blue-400'];
+  const letters = ["f", "u", "n", "!"];
+  const colors = [
+    "text-pink-500",
+    "text-yellow-400",
+    "text-purple-500",
+    "text-blue-400",
+  ];
 
   return (
     <motion.div
@@ -62,7 +67,7 @@ const AnimatedFun = () => {
           transition={{
             repeat: Infinity,
             duration: 1.4 + i * 0.1,
-            ease: 'easeInOut',
+            ease: "easeInOut",
           }}
         >
           {char}
@@ -83,25 +88,27 @@ const HeroText = () => {
       </div>
 
       {/* Animated Button */}
-      <motion.div
-        className="mt-5 inline-block px-6 py-4 rounded-full font-extrabold bg-purple-400 text-white border border-white text-lg md:text-xl shadow-lg cursor-pointer hover:bg-transparent hover:text-black hover:border-black transition-all duration-300"
-        animate={{
-          rotate: [0, -5, 5, -5, 0],
-          scale: [1, 1.05, 1],
-        }}
-        transition={{
-          duration: 2,
-          repeat: Infinity,
-          repeatDelay: 1,
-          ease: 'easeInOut',
-        }}
-        whileHover={{
-          scale: 1.1,
-          boxShadow: '0 0 15px rgba(186, 85, 211, 0.7)',
-        }}
-      >
-        🎉 Get Started ▼
-      </motion.div>
+      <a href="#cards">
+        <motion.div
+          className="mt-5 inline-block px-6 py-4 rounded-full font-extrabold bg-purple-400 text-white border border-white text-lg md:text-xl shadow-lg cursor-pointer hover:bg-transparent hover:text-black hover:border-black transition-all duration-300"
+          animate={{
+            rotate: [0, -5, 5, -5, 0],
+            scale: [1, 1.05, 1],
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            repeatDelay: 1,
+            ease: "easeInOut",
+          }}
+          whileHover={{
+            scale: 1.1,
+            boxShadow: "0 0 15px rgba(186, 85, 211, 0.7)",
+          }}
+        >
+          🎉 Get Started ▼
+        </motion.div>
+      </a>
     </div>
   );
 };
