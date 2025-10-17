@@ -17,7 +17,6 @@ import {
   Dashboard,
   Testpage,
   AdminDasbord,
-  AddPeople,
   UserDetail,
   TournamentPage,
   Leaderboard,
@@ -60,14 +59,14 @@ const App = () => {
                 </LazyLoad>
               }
             />
-            <Route
+            {/* <Route
               path="/admin/dasbord/addentitys"
               element={
                 <LazyLoad>
                   <AddPeople />
                 </LazyLoad>
               }
-            />
+            /> */}
             <Route
               path="/admin/dasbord/user-detail/:userId"
               element={
