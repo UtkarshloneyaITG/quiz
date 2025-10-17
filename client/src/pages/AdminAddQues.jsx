@@ -1,8 +1,8 @@
 import React from "react";
 import { useAdminFunctions } from "../provider/AdminProvider";
+import { TabButtons } from "../pages/TabButtons";
 import { QuestionsList } from "./Questionlist";
 import { AddQuestionForm } from "./AddQuestionForm";
-import { TabButtons } from "./TabButtons";
 
 export default function AdminAddQues() {
   const {

@@ -29,7 +29,7 @@ function LanguageSwitcher() {
     <div className="relative inline-block text-left" ref={dropdownRef}>
       <button
         onClick={toggleDropdown}
-        className="flex items-center gap-2 px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-100 transition-all"
+        className="cursor-pointer flex items-center gap-2 px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-100 transition-all"
         aria-haspopup="true"
         aria-expanded={open}
       >
