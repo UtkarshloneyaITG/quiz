@@ -1,10 +1,7 @@
 import React from "react";
 import { useAdminFunctions } from "../provider/AdminProvider";
-<<<<<<< HEAD
-import {TabButtons} from "../pages/TabButtons";
-=======
 
->>>>>>> b48b3b4813b57b1e7887c8d0f59462d455d81ead
+
 import { QuestionsList } from "./Questionlist";
 import { AddQuestionForm } from "./AddQuestionForm";
 import { TabButtons } from "./TabButtons";

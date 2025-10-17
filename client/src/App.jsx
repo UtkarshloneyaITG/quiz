@@ -64,7 +64,7 @@ const App = () => {
               path="/admin/dasbord/addentitys"
               element={
                 <LazyLoad>
-                  <AddPeople />
+                  <SignUp mode="admin"/>
                 </LazyLoad>
               }
             />
