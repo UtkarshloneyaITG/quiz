@@ -5,6 +5,7 @@ import { memo } from "react";
 import Alert from "../Components/Alert";
 // import ShapeChangingLoader from "../Components/loader";
 import HeroText from "../Components/HeroText";
+import CodeEditor from "./CodeEditor";
 
 // console.log("Checkpoint",User);
 const Home = () => {

@@ -22,6 +22,7 @@ import {
   Leaderboard,
   TournamentQuestionsPage,
 } from "./pages";
+import CodeEditor from "./pages/CodeEditor";
 
 const App = () => {
   return (  
@@ -40,6 +41,7 @@ const App = () => {
           />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/codeEditor" element={<CodeEditor />}/>
           <Route
             path="/about"
             element={

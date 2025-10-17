@@ -1,4 +1,4 @@
-import React from "react";
+import React , {useState} from "react";
 import { useAdminFunctions } from "../provider/AdminProvider";
 import { memo } from "react";
 import { Link } from "react-router-dom";
@@ -16,6 +16,9 @@ function AdminMangeUser() {
     loding,
   } = useAdminFunctions();
 
+
+   
+   
   return (
     <>
       {activeTab === "manage-users" && (
@@ -46,7 +49,7 @@ function AdminMangeUser() {
                 </option>
               </select>
               <Link
-                to={`/signup?page=${userType}`}
+                to={`/signup/${userType}/${user._id}`}
                 onClick={handleAddUser}
                 className="bg-purple-600 px-4 py-2 rounded-md hover:bg-purple-800 transition-all text-white font-semibold"
               >

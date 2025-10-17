@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 // One-time fly-in for regular letters
 const FlyInText = ({ text }) => {
@@ -88,27 +89,50 @@ const HeroText = () => {
       </div>
 
       {/* Animated Button */}
-      <a href="#cards">
-        <motion.div
-          className="mt-5 inline-block px-6 py-4 rounded-full font-extrabold bg-purple-400 text-white border border-white text-lg md:text-xl shadow-lg cursor-pointer hover:bg-transparent hover:text-black hover:border-black transition-all duration-300"
-          animate={{
-            rotate: [0, -5, 5, -5, 0],
-            scale: [1, 1.05, 1],
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            repeatDelay: 1,
-            ease: "easeInOut",
-          }}
-          whileHover={{
-            scale: 1.1,
-            boxShadow: "0 0 15px rgba(186, 85, 211, 0.7)",
-          }}
-        >
-          🎉 Get Started ▼
-        </motion.div>
-      </a>
+      <div className="flex gap-3">
+        <a href="#cards">
+          <motion.div
+            className="mt-5 inline-block px-6 py-4 rounded-full font-extrabold bg-purple-400 text-white border border-white text-lg md:text-xl shadow-lg cursor-pointer hover:bg-transparent hover:text-black hover:border-black transition-all duration-300"
+            animate={{
+              rotate: [0, -5, 5, -5, 0],
+              scale: [1, 1.05, 1],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              repeatDelay: 1,
+              ease: "easeInOut",
+            }}
+            whileHover={{
+              scale: 1.1,
+              boxShadow: "0 0 15px rgba(186, 85, 211, 0.7)",
+            }}
+          >
+            🎉 Get Started ▼
+          </motion.div>
+        </a>
+        <Link to={"/codeEditor"}>
+          <motion.div
+            className="mt-5 inline-block px-6 py-4 rounded-full font-extrabold bg-purple-100 text-purple-400 border border-purple-400 text-lg md:text-xl shadow-lg cursor-pointer hover:bg-transparent hover:text-black hover:border-black transition-all duration-300"
+            animate={{
+              rotate: [0, -5, 5, -5, 0],
+              scale: [1, 1.05, 1],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              repeatDelay: 1,
+              ease: "easeInOut",
+            }}
+            whileHover={{
+              scale: 1.1,
+              boxShadow: "0 0 15px rgba(186, 85, 211, 0.7)",
+            }}
+          >
+            Practice Now
+          </motion.div>
+        </Link>
+      </div>
     </div>
   );
 };

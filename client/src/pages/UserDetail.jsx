@@ -21,11 +21,8 @@ function UserDetail() {
         );
 
         const historyData = response.data.finalHistory || [];
-        // Reverse so latest submission comes first
-        user.scoreHistory = historyData.reverse();
-
         setCrrUser(user);
-        setArrHistory(historyData.reverse());
+        setArrHistory(historyData.reverse()); // latest first
       } catch (error) {
         console.error("Error fetching user details or history:", error);
       } finally {
@@ -51,7 +48,7 @@ function UserDetail() {
     );
   }
 
-  // Render TCO/MCQ/Subjective questions
+  // Render question
   const renderQuestion = (q) => {
     if (q.Answers && q.CorrectAnswerID) {
       const userAnswerIDs = Array.isArray(q.UserAnswer)
@@ -60,13 +57,6 @@ function UserDetail() {
       const correctIDs = Array.isArray(q.CorrectAnswerID)
         ? q.CorrectAnswerID
         : [q.CorrectAnswerID].filter(Boolean);
-
-      // Determine status
-      const isFullyCorrect =
-        userAnswerIDs.length === correctIDs.length &&
-        correctIDs.every((id) => userAnswerIDs.includes(id));
-      const isPartiallyCorrect =
-        !isFullyCorrect && userAnswerIDs.some((id) => correctIDs.includes(id));
 
       return (
         <div className="mb-4 p-4 bg-zinc-700 rounded-xl shadow-md hover:shadow-xl transition-all">
@@ -81,16 +71,14 @@ function UserDetail() {
               const isUserSelected = userAnswerIDs.includes(ans.AnswerID);
               const isCorrect = correctIDs.includes(ans.AnswerID);
 
-              let bg = "bg-zinc-800 text-white"; // default
+              let bg = "bg-zinc-800 text-white";
 
-              if (isCorrect && isUserSelected && isFullyCorrect)
-                bg = "bg-green-600 text-white font-semibold"; // ✅ fully correct
-              else if (isCorrect && !isUserSelected && isPartiallyCorrect)
-                bg = "bg-yellow-500 text-white"; // ⚠️ unselected correct
-              else if (isUserSelected && !isCorrect)
-                bg = "bg-red-500 text-white"; // ❌ wrong
-              else if (isCorrect && isUserSelected && isPartiallyCorrect)
-                bg = "bg-green-400 text-white"; // partially correct selected
+              if (isCorrect && isUserSelected)
+                bg = "bg-green-600 text-white"; // ✅ correct selected
+              else if (!isCorrect && isUserSelected)
+                bg = "bg-red-500 text-white"; // ❌ wrong selected
+              else if (isCorrect && !isUserSelected)
+                bg = "bg-yellow-500 text-white"; // ⚠️ correct not selected
 
               return (
                 <li
@@ -98,9 +86,7 @@ function UserDetail() {
                   className={`p-1 rounded transition-all hover:bg-purple-700/30 ${bg}`}
                 >
                   {ans.Answer} {isUserSelected ? "(Your choice)" : ""}
-                  {!isUserSelected && isCorrect && isPartiallyCorrect
-                    ? " (Correct)"
-                    : ""}
+                  {isCorrect && !isUserSelected ? " (Correct)" : ""}
                 </li>
               );
             })}
@@ -109,7 +95,7 @@ function UserDetail() {
       );
     }
 
-    // Subjective question
+    // Subjective
     return (
       <div className="mb-4 p-4 bg-zinc-700 rounded-xl shadow-md hover:shadow-xl transition-all">
         <h3 className="text-white font-semibold mb-2">
@@ -178,9 +164,11 @@ function UserDetail() {
                     </p>
                   </div>
 
-                  {[...(session.CorrectAnswers || []),
+                  {[
+                    ...(session.CorrectAnswers || []),
                     ...(session.WrongAnswers || []),
-                    ...(session.SubjectiveAnswers || [])].map((q, idx) => (
+                    ...(session.SubjectiveAnswers || []),
+                  ].map((q, idx) => (
                     <div key={idx}>{renderQuestion(q)}</div>
                   ))}
                 </div>
