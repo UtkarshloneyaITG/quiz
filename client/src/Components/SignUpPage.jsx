@@ -30,7 +30,10 @@ export default function SignUp(props) {
 
   useEffect(() => {
     const token = localStorage.getItem("token") || null;
-
+     if (token) {
+      navigate("/");
+      showAlert("HomePage", "#006400");
+    }
 
   }, []);
 

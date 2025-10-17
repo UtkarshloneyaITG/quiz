@@ -298,21 +298,21 @@ exports.FindUser = async (req, res, next) => {
 
 exports.getLeaderBord = async (req, res, next) => {
   try {
-    let users = await User.find();
+    let users = await User.find().sort(scoreHistory.length > 0);
     
-    users = users.filter(user => user.scoreHistory.length > 0);
+    // users = users.filter(user => user.scoreHistory.length > 0);
     console.log(users);
 
-    for (let user of users) {
-      let total = 0;
-      for (let record of user.scoreHistory) {
-        total += record.score;
-      }
-      user.totalScore = total; // add totalScore property
-    }
+    // for (let user of users) {
+    //   let total = 0;
+    //   for (let record of user.scoreHistory) {
+    //     total += record.score;
+    //   }
+    //   user.totalScore = total; // add totalScore property
+    // }
 
-    // Sort descending by totalScore
-    users = users.sort((a, b) => b.totalScore - a.totalScore);
+    // // Sort descending by totalScore
+    // users = users.sort((a, b) => b.totalScore - a.totalScore);
 
     res.json(users);
 
