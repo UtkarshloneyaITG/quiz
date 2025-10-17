@@ -9,21 +9,25 @@ import HeroText from "../Components/HeroText";
 // console.log("Checkpoint",User);
 const Home = () => {
   const User = JSON.parse(localStorage.getItem("user"));
+  console.log("user hello");
   return (
-    <div>{
-      User?
-      <>
-      {/* <Alert message={"Welcome" + User.fullName} color="#006400" /> */}
-      <Background/>
-      <HeroText/>
-      <SelectCard />
-      </>
-   :    <div>
-      <Alert message={"Your Welcome Make An Account"} color="#CE2029"/>
-      <Background/>
-      <HeroText/>
-      <SelectCard />
-    </div>}</div>
-);
+    <div>
+      {User ? (
+        <>
+          {/* <Alert message={"Welcome" + User.fullName} color="#006400" /> */}
+          <Background />
+          <HeroText />
+          <SelectCard />
+        </>
+      ) : (
+        <div>
+          <Alert message={"Welcome NewBie"} color="#CE2029" />
+          <Background />
+          <HeroText />
+          <SelectCard />
+        </div>
+      )}
+    </div>
+  );
 };
 export default memo(Home);

@@ -21,19 +21,24 @@ const LiveUser = () => {
     };
   }, []);
   let topWindow = window.innerHeight - 55;
-  let rightWindow = window.innerWidth - 200
+  let rightWindow = window.innerWidth - 200;
   console.log(topWindow);
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       drag
-      dragConstraints={{ top: -topWindow, left: 10, bottom: 1, right: rightWindow }}
+      dragConstraints={{
+        top: -topWindow,
+        left: 10,
+        bottom: 1,
+        right: rightWindow,
+      }}
       className="fixed bottom-3 left-2 py-2 px-3 rounded-3xl z-100 bg-violet-950 text-white liveUser-bar flex items-center gap-2"
     >
-      <div class="relative flex h-3 w-3">
-        <span class="absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75 animate-ping"></span>
-        <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+      <div className="relative flex h-3 w-3">
+        <span className="absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75 animate-ping"></span>
+        <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
       </div>
       <h2>Active Users : {liveUsers}</h2>
     </motion.div>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getAllUser, getUserDetailsById } from "../servics/api";
 import { ImagesUrls, Qoutes } from "../servics/ImagesUrls.jsx";
+import Loading from "../sharedComponents/Loding.jsx";
 function UserDetail() {
   const [arrHistory, setArrHistory] = useState([]);
   const [crrUer, setCrrUser] = useState(null);
@@ -21,7 +22,7 @@ function UserDetail() {
   }, []);
 
   if (!crrUer) {
-    return <div>Loding</div>;
+    return <Loading />;
   }
 
   return (

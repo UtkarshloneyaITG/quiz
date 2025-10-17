@@ -2,7 +2,7 @@ import React from "react";
 
 function STQ({ currentQuestion, handleSubjectiveChange }) {
   return (
-    <div className="options mb-6">
+    <div className="options mb-6 bg-white">
       <textarea
         className="resize-none outline-none rounded p-2 h-[250px] w-full"
         placeholder="Type your answer here..."
